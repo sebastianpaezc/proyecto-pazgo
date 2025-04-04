@@ -16,8 +16,8 @@ provider "aws" {
   }
   default_tags {
     tags = {
-      Environment = "Dev"
-      Proyecto    = "Pazgo"
+      Environment = var.entorno
+      Proyect     = "Pazgo"
       AppId       = "123"
     }
   }
