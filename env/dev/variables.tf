@@ -39,10 +39,11 @@ variable "nombre_instancia" {
 }
 
 variable "vpc_security_group_ids" {
-  type        = any
-  description = "Id external del rol"
+  type        = list(string)
+  description = "Lista de IDs de grupos de seguridad"
   default     = []
 }
+
 
 variable "subnet_id" {
   type        = any
