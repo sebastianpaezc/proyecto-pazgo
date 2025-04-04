@@ -23,9 +23,6 @@ provider "aws" {
   }
 }
 
-
-
-
 /*
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "cloud-state-703671936667"
