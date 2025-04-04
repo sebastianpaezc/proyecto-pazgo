@@ -53,7 +53,3 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 <<<<<<< HEAD
 }*/
-=======
-}
-*/
->>>>>>> 95bd74cdda4fe548252a5c3f578b5f3d554202ca
