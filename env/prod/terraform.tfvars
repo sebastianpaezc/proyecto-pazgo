@@ -1,5 +1,5 @@
 region                 = "us-east-1"
-assume_role_arn        = "arn:aws:iam::968945269517:role/terraform_v1"
+assume_role_arn        = "arn:aws:iam::968945269517:role/terraform"
 assume_role_exteral_id = "terraform-external-id"
 tipo_instancia         = "t2.micro"
 ami_id                 = "ami-01816d07b1128cd2d"

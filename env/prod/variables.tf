@@ -30,7 +30,7 @@ variable "entorno" {
 variable "nombre_instancia" {
   type        = string
   description = "nombre de la instancia"
-  default     = "un_raton"
+  default     = "supercloud"
 
 }
 
