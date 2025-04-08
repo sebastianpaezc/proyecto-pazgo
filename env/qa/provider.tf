@@ -23,7 +23,7 @@ provider "aws" {
   }
 }
 
-resource "aws_s3_bucket" "terraform_state" {
+/*resource "aws_s3_bucket" "terraform_state" {
    bucket = "cloud-state-442697343828"
  
    lifecycle {
@@ -47,4 +47,4 @@ resource "aws_s3_bucket" "terraform_state" {
      name = "LockID"
      type = "S"
    }
- }
+ }*/
