@@ -1,4 +1,4 @@
-resource "aws_instance" "Jorge" {
+resource "aws_instance" "Jorgeqa" {
   ami                    = var.ami_id
   instance_type          = var.tipo_instancia
   vpc_security_group_ids = length(var.vpc_security_group_ids) > 0 ? var.vpc_security_group_ids : [data.aws_security_group.default.id]
