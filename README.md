@@ -1,4 +1,5 @@
 # proyecto-pazgo
+<<<<<<< HEAD
 este repo es para hacer pruebas para nosotros los Paez - Villamil
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -121,3 +122,4 @@ Terraform tiene una arquitectura modular, declarativa y basada en estados, dise�
    Reutilización: Puedes llamar a local.name_prefix en los recursos para nombrarlos consistentemente.
    Condiciones: instance_type cambia según el entorno.
    Orden: Centralizas cosas como etiquetas y nombres para que no estén repetidas en cada recurso.
+
