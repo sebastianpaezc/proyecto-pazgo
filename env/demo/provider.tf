@@ -8,7 +8,8 @@ terraform {
   }
 }
 provider "aws" {
-  region = var.region
+  region  = var.region
+  profile = "demo"
   assume_role {
     role_arn     = var.assume_role_arn
     external_id  = var.assume_role_exteral_id

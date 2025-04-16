@@ -5,7 +5,7 @@ resource "aws_instance" "Jhonny" {
   subnet_id              = var.subnet_id
 
   tags = {
-    Name = var.nombre_instancia
+    Name        = local.name
     Environment = var.entorno
   }
 }
