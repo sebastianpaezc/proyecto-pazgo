@@ -24,7 +24,36 @@ resource "aws_security_group_rule" "example" {
   security_group_id = aws_security_group.sg_pazgo.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
+resource "aws_security_group_rule" "in443" {
 
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  description       = "regla_entrada"
+  security_group_id = aws_security_group.sg_pazgo.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+resource "aws_security_group_rule" "out80" {
+
+  type              = "egress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  description       = "regla_entrada"
+  security_group_id = aws_security_group.sg_pazgo.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+resource "aws_security_group_rule" "out443" {
+
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  description       = "regla_entrada"
+  security_group_id = aws_security_group.sg_pazgo.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
 
 
 
