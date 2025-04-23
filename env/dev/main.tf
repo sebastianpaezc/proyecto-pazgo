@@ -3,10 +3,11 @@ resource "aws_instance" "instancia-dev" {
   ami                    = "ami-01816d07b1128cd2d"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg_pazgo.id]
-  subnet_id              = data.aws_subnet.zd_1s.id
+  subnet_id              = aws_subnet.subred_privada.id
   tags = {
     Name = "server_pazgo"
   }
+  depends_on = [aws_subnet.subred_privada]
 }
 
 resource "aws_security_group" "sg_pazgo" {
@@ -14,12 +15,21 @@ resource "aws_security_group" "sg_pazgo" {
   description = "grupo de seguridad instancia"
   vpc_id      = data.aws_vpc.vpc_default.id
 }
-resource "aws_security_group_rule" "example" {
+resource "aws_security_group_rule" "regla_uno" {
 
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
+  description       = "regla_entrada"
+  security_group_id = aws_security_group.sg_pazgo.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+resource "aws_security_group_rule" "regla_dos" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
   description       = "regla_entrada"
   security_group_id = aws_security_group.sg_pazgo.id
   cidr_blocks       = ["0.0.0.0/0"]
