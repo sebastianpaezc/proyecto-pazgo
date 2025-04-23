@@ -37,7 +37,6 @@ resource "aws_route_table_association" "asociacion_privada" {
   route_table_id = aws_route_table.mi_tabla_ruta_privada.id
 }
 
-
 ##### Subnet privada #####
 resource "aws_subnet" "subred_privada" {
   vpc_id            = data.aws_vpc.vpc_default.id
