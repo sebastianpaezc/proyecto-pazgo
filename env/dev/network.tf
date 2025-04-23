@@ -47,4 +47,4 @@ resource "aws_subnet" "subred_privada" {
     Name = "subred-privada"
   }
 }
-
+#########jorgito
