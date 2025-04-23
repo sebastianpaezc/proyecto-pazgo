@@ -21,7 +21,7 @@ resource "aws_nat_gateway" "mi_nat" {
 
 ##### Ruta table #####
 resource "aws_route_table" "mi_tabla_ruta_privada" {
-  vpc_id = aws_vpc.mi_vpc.id
+  vpc_id = data.aws_vpc.vpc_default.id
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -34,14 +34,14 @@ resource "aws_route_table" "mi_tabla_ruta_privada" {
 }
 resource "aws_route_table_association" "asociacion_privada" {
   subnet_id      = aws_subnet.subred_privada.id
-  route_table_id = aws_route_table.tabla_privada.id
+  route_table_id = aws_route_table.mi_tabla_ruta_privada.id
 }
 
 
 ##### Subnet privada #####
 resource "aws_subnet" "subred_privada" {
-  vpc_id            = aws_vpc.mi_vpc.id
-  cidr_block        = "10.0.2.0/24"
+  vpc_id            = data.aws_vpc.vpc_default.id
+  cidr_block        = "172.31.250.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
