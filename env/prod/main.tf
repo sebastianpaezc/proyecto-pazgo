@@ -23,7 +23,7 @@ resource "aws_instance" "Pazgo" {
     systemctl enable nginx
     systemctl start nginx
     # Crear el archivo index.html en la ubicación correcta
-    echo "Hello World desde Nginx en Terraform, jajajaja estamos Arriba muchachos jejeje" | tee /usr/share/nginx/html/index.html
+    echo "Hello World desde Nginx en Terraform jajajaja estamos Arriba muchachos jejeje," | tee /usr/share/nginx/html/index.html
     # Asegurar que el archivo tenga los permisos adecuados
     chown nginx:nginx /usr/share/nginx/html/index.html
     chmod 644 /usr/share/nginx/html/index.html
