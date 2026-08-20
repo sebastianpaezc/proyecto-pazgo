@@ -3,7 +3,8 @@
 /* ══════════════════════════════════════════════
    NAVEGACIÓN SPA
 ══════════════════════════════════════════════ */
-const PAGES = ['inicio', 'servicios', 'cotizaciones', 'agendar', 'confirmacion', 'nosotros', 'contacto'];
+const PAGES = ['inicio', 'servicios', 'cotizaciones', 'agendar', 'confirmacion', 'nosotros', 'contacto',
+    'catalogo-camaras', 'catalogo-alarmas', 'catalogo-redes', 'catalogo-electricidad', 'catalogo-soporte'];
 
 function showPage(id) {
     PAGES.forEach(p => {
