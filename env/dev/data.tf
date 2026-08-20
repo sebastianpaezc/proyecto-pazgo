@@ -20,3 +20,17 @@ data "aws_subnet" "zd_1s" {
     values = ["true"]
   }
 }
+
+data "aws_subnet" "zd_2s" {
+  filter {
+    name   = "availability-zone"
+    values = ["us-east-1b"]
+  }
+
+  filter {
+    name   = "default-for-az"
+    values = ["true"]
+  }
+}
+
+
