@@ -1804,3 +1804,14 @@ body {
     color: var(--cyan-dk);
     font-weight: 600;
 }
+
+/* Resaltado azul en celda de cableado */
+.cableado-highlight {
+    display: inline-block;
+    background: #1a7fd4;
+    color: #ffffff;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: .84rem;
+    font-weight: 600;
+}
