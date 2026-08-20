@@ -1518,3 +1518,259 @@ body {
         gap: 10px;
     }
 }
+
+/* ══════════════════════════ COTIZADOR INTERACTIVO ══════════════════════════ */
+
+.cotizador-wrap { max-width: 960px; }
+
+.cotizador-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.cotizador-header > span { font-size: 2.2rem; margin-top: 4px; flex-shrink: 0; }
+
+/* ── Modalidad ── */
+.modalidad-box {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow);
+}
+.modalidad-label {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 14px;
+}
+.modalidad-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.mod-btn {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--gray);
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--text);
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    text-align: left;
+}
+.mod-btn span {
+    font-size: .75rem;
+    font-weight: 400;
+    color: var(--muted);
+}
+.mod-btn.active {
+    border-color: var(--cyan);
+    background: #e8faff;
+    box-shadow: 0 2px 12px rgba(0,200,255,.15);
+    color: var(--navy);
+}
+.mod-btn:hover:not(.active) { border-color: #b0d0e0; }
+
+/* ── Secciones ── */
+.cot-section { margin-bottom: 36px; }
+.cot-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+}
+
+/* ── Combos ── */
+.combos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+.combo-card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.combo-card:hover { border-color: var(--cyan); }
+.combo-card.selected {
+    border-color: var(--cyan);
+    background: #e8faff;
+    box-shadow: 0 2px 14px rgba(0,200,255,.18);
+}
+.combo-check {
+    position: absolute;
+    top: 10px; right: 12px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem;
+    color: transparent;
+    background: var(--white);
+    transition: all .2s;
+}
+.combo-card.selected .combo-check {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--navy);
+    font-weight: 900;
+}
+.combo-card strong { font-size: .92rem; color: var(--text); }
+.combo-card > span { font-size: .78rem; color: var(--muted); line-height: 1.5; }
+.combo-precio { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+.combo-precio b { color: var(--text); font-size: .88rem; }
+
+/* ── Tabla de ítems ── */
+.cot-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+}
+.cot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .84rem;
+    background: var(--white);
+}
+.cot-table thead th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 11px 14px;
+    text-align: left;
+    font-size: .78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.cot-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+}
+.cot-table tbody tr:last-child { border-bottom: none; }
+.cot-table tbody tr:hover { background: #f5faff; }
+.cot-table td {
+    padding: 10px 14px;
+    color: var(--text);
+    vertical-align: middle;
+}
+.cot-table .subtotal {
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+}
+
+/* Badges de tipo */
+.tipo-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.tipo-badge.mat  { background: #e0f0fc; color: #1a7fd4; }
+.tipo-badge.log  { background: #fff0d0; color: #c08010; }
+.tipo-badge.mo   { background: #e0ffe0; color: #208040; }
+.tipo-badge.otro { background: #f0e8fc; color: #8040a0; }
+
+/* Input de cantidad */
+.qty-input {
+    width: 64px;
+    padding: 6px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: .88rem;
+    text-align: center;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color .2s;
+}
+.qty-input:focus { border-color: var(--cyan); }
+.qty-input:disabled { background: var(--gray); color: var(--muted); cursor: not-allowed; }
+
+/* ── Resumen y envío ── */
+.cot-resumen {
+    background: var(--navy);
+    border-radius: var(--radius-lg);
+    padding: 28px 28px 32px;
+}
+.cot-total-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.cot-total-box span {
+    font-size: 1rem;
+    color: #8ab0cc;
+    font-weight: 600;
+}
+.cot-total-box strong {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cyan);
+}
+.cot-nota {
+    font-size: .76rem;
+    color: #4a7090;
+    margin-bottom: 20px;
+}
+.cot-acciones {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.cot-input {
+    flex: 1;
+    min-width: 160px;
+    padding: 11px 14px;
+    border: 1.5px solid rgba(255,255,255,.18);
+    border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    color: var(--white);
+    font-size: .88rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, background .2s;
+}
+.cot-input::placeholder { color: rgba(255,255,255,.38); }
+.cot-input:focus {
+    border-color: var(--cyan);
+    background: rgba(0,200,255,.07);
+}
+.cot-enviar {
+    flex-shrink: 0;
+    font-size: .88rem;
+    padding: 12px 22px;
+    white-space: nowrap;
+}
+
+/* ── Responsive cotizador ── */
+@media (max-width: 640px) {
+    .combos-grid { grid-template-columns: 1fr; }
+    .cot-total-box strong { font-size: 1.5rem; }
+    .cot-table thead th:nth-child(3) { display: none; }
+    .cot-table td:nth-child(3) { display: none; }
+}

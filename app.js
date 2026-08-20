@@ -12,7 +12,9 @@ const PAGES = [
     'inicio', 'servicios', 'cotizaciones', 'agendar', 'confirmacion',
     'nosotros', 'contacto',
     'catalogo-camaras', 'catalogo-alarmas', 'catalogo-redes',
-    'catalogo-electricidad', 'catalogo-soporte'
+    'catalogo-electricidad', 'catalogo-soporte',
+    'cotizador-camaras', 'cotizador-alarmas', 'cotizador-redes',
+    'cotizador-electricidad', 'cotizador-soporte'
 ];
 
 function showPage(id) {
@@ -187,3 +189,142 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fd) fd.min = new Date().toISOString().split('T')[0];
     showPage('inicio');
 });
+
+/* ══════════════════════════════════════════════
+   COTIZADOR INTERACTIVO
+══════════════════════════════════════════════ */
+
+// Estado: modalidad por servicio ('todo' | 'mano')
+const modalidades = {
+    camaras: 'todo', alarmas: 'todo', redes: 'todo',
+    electricidad: 'todo', soporte: 'todo'
+};
+
+// Abre el cotizador del servicio indicado
+function abrirCotizador(servicio) {
+    showPage('cotizador-' + servicio);
+    recalcular(servicio);
+}
+
+// Cambia la modalidad y actualiza la UI
+function setModalidad(servicio, modo) {
+    modalidades[servicio] = modo;
+
+    // Botones activos
+    document.getElementById(servicio + '-mod-todo').classList.toggle('active', modo === 'todo');
+    document.getElementById(servicio + '-mod-mano').classList.toggle('active', modo === 'mano');
+
+    const wrap = document.getElementById('page-cotizador-' + servicio);
+
+    // Mostrar / ocultar columna de precio unitario
+    wrap.querySelectorAll('.todo-costo').forEach(el => {
+        el.style.display = modo === 'todo' ? '' : 'none';
+    });
+
+    // En modo mano de obra, poner qty=0 a filas que no tienen mano de obra
+    const tabla = document.getElementById('tabla-' + servicio);
+    tabla.querySelectorAll('tbody tr').forEach(tr => {
+        const mano = parseInt(tr.dataset.mano, 10);
+        const input = tr.querySelector('.qty-input');
+        if (modo === 'mano' && mano === 0) {
+            input.value = 0;
+            input.disabled = true;
+        } else {
+            input.disabled = false;
+            if (modo === 'mano' && parseInt(input.value, 10) === 0) input.value = 1;
+        }
+    });
+
+    // Precios de combos
+    wrap.querySelectorAll('.combo-precio.todo-costo').forEach(el => el.style.display = modo === 'todo' ? '' : 'none');
+    wrap.querySelectorAll('.combo-precio.mano-obra').forEach(el => el.style.display = modo === 'mano' ? '' : 'none');
+
+    recalcular(servicio);
+}
+
+// Recalcula el total de la tabla
+function recalcular(servicio) {
+    const modo  = modalidades[servicio];
+    const tabla = document.getElementById('tabla-' + servicio);
+    let total   = 0;
+
+    tabla.querySelectorAll('tbody tr').forEach(tr => {
+        const precio = parseInt(tr.dataset[modo === 'todo' ? 'todo' : 'mano'], 10) || 0;
+        const qty    = parseInt(tr.querySelector('.qty-input').value, 10) || 0;
+        const sub    = precio * qty;
+        tr.querySelector('.subtotal').textContent = '$ ' + sub.toLocaleString('es-CO');
+        total += sub;
+    });
+
+    document.getElementById('total-' + servicio).textContent = '$ ' + total.toLocaleString('es-CO');
+}
+
+// Selecciona / deselecciona un combo (visual, no suma al total aún)
+function toggleCombo(card, servicio, id) {
+    card.classList.toggle('selected');
+}
+
+// Formatea número a pesos colombianos
+function formatCOP(n) {
+    return '$ ' + Number(n).toLocaleString('es-CO');
+}
+
+// Arma el resumen de la tabla para enviarlo por WhatsApp
+function buildResumen(servicio) {
+    const modo   = modalidades[servicio];
+    const tabla  = document.getElementById('tabla-' + servicio);
+    const lineas = [];
+
+    tabla.querySelectorAll('tbody tr').forEach(tr => {
+        const precio = parseInt(tr.dataset[modo === 'todo' ? 'todo' : 'mano'], 10) || 0;
+        const qty    = parseInt(tr.querySelector('.qty-input').value, 10) || 0;
+        if (qty === 0) return;
+        const concepto = tr.querySelector('td').textContent.trim();
+        lineas.push(`  • ${concepto}: ${qty} × ${formatCOP(precio)} = ${formatCOP(precio * qty)}`);
+    });
+
+    // Combos seleccionados
+    const combos = [];
+    document.querySelectorAll(`#page-cotizador-${servicio} .combo-card.selected strong`).forEach(el => {
+        combos.push('  📦 ' + el.textContent.trim());
+    });
+
+    return { lineas, combos };
+}
+
+// Envía la cotización por WhatsApp
+function enviarCotizador(servicio) {
+    const nombre  = document.getElementById('nombre-' + servicio).value.trim();
+    const tel     = document.getElementById('tel-'    + servicio).value.trim();
+    const total   = document.getElementById('total-'  + servicio).textContent;
+    const modo    = modalidades[servicio] === 'todo' ? 'Todo costo (materiales + M.O.)' : 'Solo mano de obra';
+    const nombres = { camaras:'Cámaras de Seguridad', alarmas:'Alarmas',
+                      redes:'Redes y Conectividad', electricidad:'Electricidad y Automatización',
+                      soporte:'Soporte Técnico' };
+
+    const { lineas, combos } = buildResumen(servicio);
+
+    let msg = `🔔 *Cotización - Pazgo Tecnología*\n`;
+    msg    += `📋 *Servicio:* ${nombres[servicio]}\n`;
+    msg    += `⚙️ *Modalidad:* ${modo}\n`;
+    if (nombre) msg += `👤 *Nombre:* ${nombre}\n`;
+    if (tel)    msg += `📱 *Teléfono:* ${tel}\n`;
+    msg    += `\n`;
+
+    if (combos.length) {
+        msg += `*Combos seleccionados:*\n${combos.join('\n')}\n\n`;
+    }
+    if (lineas.length) {
+        msg += `*Ítems:\n*${lineas.join('\n')}\n\n`;
+    }
+    msg += `💰 *Total estimado: ${total}*\n`;
+    msg += `\n_Precios sujetos a confirmación en visita técnica._`;
+
+    const a   = document.createElement('a');
+    a.href    = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    a.target  = '_blank';
+    a.rel     = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
