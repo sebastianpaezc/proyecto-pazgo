@@ -1258,9 +1258,9 @@
               <td class="subtotal">$ 400.000</td>
             </tr>
             <tr data-todo="250000" data-mano="0">
-              <td>Cableado hasta 100 mts (todos los puntos)</td><td class="tipo-badge mat">Material</td>
+              <td>Cableado por tramo de 100 mts</td><td class="tipo-badge mat">Material</td>
               <td class="todo-costo precio-unit">$ 250.000</td>
-              <td><input type="number" class="qty-input" value="1" min="0" max="1" onchange="recalcular('camaras')"></td>
+              <td><input type="number" class="qty-input" value="1" min="1" onchange="recalcular('camaras')" title="1 tramo = hasta 100 mts. 2 tramos = hasta 200 mts, etc."></td>
               <td class="subtotal">$ 250.000</td>
             </tr>
             <tr data-todo="250000" data-mano="250000">
@@ -1278,14 +1278,11 @@
             </tr>
           </tfoot>
         </table>
-      </div>
+      </div><!-- /cot-table-wrap camaras -->
+      <p class="cot-table-hint">💡 <span>Cableado:</span> cada tramo cubre hasta 100 mts — 1 tramo = $250.000 · 2 tramos (200 mts) = $500.000 · 3 tramos (300 mts) = $750.000</p>
     </div>
 
     <!-- TOTAL Y ENVÍO -->
-    <div class="cot-resumen">
-      <div class="cot-total-box">
-        <span>Total estimado:</span>
-        <strong id="total-camaras">$ 945.000</strong>
       </div>
       <p class="cot-nota">* Precios aproximados. El valor final se confirma en visita técnica.</p>
       <div class="cot-acciones">
