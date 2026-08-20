@@ -1815,3 +1815,27 @@ body {
     font-size: .84rem;
     font-weight: 600;
 }
+
+/* Asegurar que el bloque de resumen del cotizador sea visible completo */
+.cotizador-wrap {
+    padding-bottom: 80px !important;
+}
+.cot-resumen {
+    margin-top: 32px;
+    position: relative;
+    z-index: 1;
+}
+/* El botón flotante de WhatsApp no debe tapar el botón de envío */
+@media (max-width: 768px) {
+    .wa-float { bottom: 80px; }
+}
+
+/* Fix: páginas de cotizador con scroll completo */
+[id^="page-cotizador-"].active {
+    display: block;
+    min-height: 100vh;
+    overflow-y: visible;
+}
+[id^="page-cotizador-"] .inner-page-wrap {
+    padding-bottom: 100px;
+}
