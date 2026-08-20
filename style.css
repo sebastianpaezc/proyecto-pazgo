@@ -1774,3 +1774,20 @@ body {
     .cot-table thead th:nth-child(3) { display: none; }
     .cot-table td:nth-child(3) { display: none; }
 }
+
+/* Fila de margen automático en tfoot */
+.cot-table tfoot .fila-margen td {
+    padding: 10px 14px;
+    background: #f0f8e8;
+    border-top: 2px solid var(--border);
+    font-size: .82rem;
+    color: #208040;
+}
+.cot-table tfoot .fila-margen .subtotal {
+    font-weight: 700;
+    color: #208040;
+}
+.cot-table tfoot .fila-margen em {
+    font-style: normal;
+    font-weight: 600;
+}

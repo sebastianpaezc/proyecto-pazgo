@@ -246,16 +246,22 @@ function setModalidad(servicio, modo) {
 function recalcular(servicio) {
     const modo  = modalidades[servicio];
     const tabla = document.getElementById('tabla-' + servicio);
-    let total   = 0;
+    let subtotal = 0;
 
     tabla.querySelectorAll('tbody tr').forEach(tr => {
         const precio = parseInt(tr.dataset[modo === 'todo' ? 'todo' : 'mano'], 10) || 0;
         const qty    = parseInt(tr.querySelector('.qty-input').value, 10) || 0;
         const sub    = precio * qty;
         tr.querySelector('.subtotal').textContent = '$ ' + sub.toLocaleString('es-CO');
-        total += sub;
+        subtotal += sub;
     });
 
+    // Margen automático del 5% (no editable por el cliente)
+    const margen    = Math.round(subtotal * 0.05);
+    const margenEl  = document.getElementById('margen-' + servicio);
+    if (margenEl) margenEl.textContent = '$ ' + margen.toLocaleString('es-CO');
+
+    const total = subtotal + margen;
     document.getElementById('total-' + servicio).textContent = '$ ' + total.toLocaleString('es-CO');
 }
 
@@ -274,14 +280,20 @@ function buildResumen(servicio) {
     const modo   = modalidades[servicio];
     const tabla  = document.getElementById('tabla-' + servicio);
     const lineas = [];
+    let subtotal = 0;
 
     tabla.querySelectorAll('tbody tr').forEach(tr => {
         const precio = parseInt(tr.dataset[modo === 'todo' ? 'todo' : 'mano'], 10) || 0;
         const qty    = parseInt(tr.querySelector('.qty-input').value, 10) || 0;
         if (qty === 0) return;
         const concepto = tr.querySelector('td').textContent.trim();
+        subtotal += precio * qty;
         lineas.push(`  • ${concepto}: ${qty} × ${formatCOP(precio)} = ${formatCOP(precio * qty)}`);
     });
+
+    // Margen 5% automático
+    const margen = Math.round(subtotal * 0.05);
+    if (margen > 0) lineas.push(`  • Margen imprevistos (5%): ${formatCOP(margen)}`);
 
     // Combos seleccionados
     const combos = [];

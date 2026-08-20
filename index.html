@@ -1258,36 +1258,25 @@
               <td class="subtotal">$ 400.000</td>
             </tr>
             <tr data-todo="250000" data-mano="0">
-              <td>Cableado y materiales de instalación</td><td class="tipo-badge mat">Material</td>
+              <td>Cableado hasta 100 mts (todos los puntos)</td><td class="tipo-badge mat">Material</td>
               <td class="todo-costo precio-unit">$ 250.000</td>
-              <td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('camaras')"></td>
+              <td><input type="number" class="qty-input" value="1" min="0" max="1" onchange="recalcular('camaras')"></td>
               <td class="subtotal">$ 250.000</td>
-            </tr>
-            <tr data-todo="50000" data-mano="0">
-              <td>Conectores, canaleta y fijaciones</td><td class="tipo-badge mat">Material</td>
-              <td class="todo-costo precio-unit">$ 50.000</td>
-              <td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('camaras')"></td>
-              <td class="subtotal">$ 50.000</td>
-            </tr>
-            <tr data-todo="20000" data-mano="0">
-              <td>Transporte por servicio</td><td class="tipo-badge log">Logística</td>
-              <td class="todo-costo precio-unit">$ 20.000</td>
-              <td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('camaras')"></td>
-              <td class="subtotal">$ 20.000</td>
             </tr>
             <tr data-todo="250000" data-mano="250000">
-              <td>Horas de trabajo directo</td><td class="tipo-badge mo">Mano de obra</td>
+              <td>Punto de instalación</td><td class="tipo-badge mo">Mano de obra</td>
               <td class="todo-costo precio-unit">$ 250.000</td>
               <td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('camaras')"></td>
               <td class="subtotal">$ 250.000</td>
             </tr>
-            <tr data-todo="100000" data-mano="0">
-              <td>Otros consumibles</td><td class="tipo-badge otro">Otro</td>
-              <td class="todo-costo precio-unit">$ 100.000</td>
-              <td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('camaras')"></td>
-              <td class="subtotal">$ 100.000</td>
-            </tr>
           </tbody>
+          <tfoot>
+            <tr class="fila-margen">
+              <td colspan="3"><em>Margen imprevistos (5%)</em></td>
+              <td>—</td>
+              <td class="subtotal" id="margen-camaras">$ 45.000</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -1296,7 +1285,7 @@
     <div class="cot-resumen">
       <div class="cot-total-box">
         <span>Total estimado:</span>
-        <strong id="total-camaras">$ 1.070.000</strong>
+        <strong id="total-camaras">$ 945.000</strong>
       </div>
       <p class="cot-nota">* Precios aproximados. El valor final se confirma en visita técnica.</p>
       <div class="cot-acciones">
@@ -1377,6 +1366,13 @@
             <tr data-todo="20000" data-mano="0"><td>Transporte</td><td class="tipo-badge log">Logística</td><td class="todo-costo precio-unit">$ 20.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('alarmas')"></td><td class="subtotal">$ 20.000</td></tr>
             <tr data-todo="200000" data-mano="200000"><td>Mano de obra instalación</td><td class="tipo-badge mo">Mano de obra</td><td class="todo-costo precio-unit">$ 200.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('alarmas')"></td><td class="subtotal">$ 200.000</td></tr>
           </tbody>
+          <tfoot>
+            <tr class="fila-margen">
+              <td colspan="3"><em>Margen imprevistos (5%)</em></td>
+              <td>—</td>
+              <td class="subtotal" id="margen-alarmas">$ 0</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -1456,6 +1452,13 @@
             <tr data-todo="20000" data-mano="0"><td>Transporte</td><td class="tipo-badge log">Logística</td><td class="todo-costo precio-unit">$ 20.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('redes')"></td><td class="subtotal">$ 20.000</td></tr>
             <tr data-todo="180000" data-mano="180000"><td>Mano de obra por punto de red</td><td class="tipo-badge mo">Mano de obra</td><td class="todo-costo precio-unit">$ 45.000</td><td><input type="number" class="qty-input" value="4" min="0" onchange="recalcular('redes')"></td><td class="subtotal">$ 180.000</td></tr>
           </tbody>
+          <tfoot>
+            <tr class="fila-margen">
+              <td colspan="3"><em>Margen imprevistos (5%)</em></td>
+              <td>—</td>
+              <td class="subtotal" id="margen-redes">$ 0</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -1532,6 +1535,13 @@
             <tr data-todo="280000" data-mano="280000"><td>Mano de obra eléctrica</td><td class="tipo-badge mo">Mano de obra</td><td class="todo-costo precio-unit">$ 280.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('electricidad')"></td><td class="subtotal">$ 280.000</td></tr>
             <tr data-todo="80000" data-mano="0"><td>Otros materiales</td><td class="tipo-badge otro">Otro</td><td class="todo-costo precio-unit">$ 80.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('electricidad')"></td><td class="subtotal">$ 80.000</td></tr>
           </tbody>
+          <tfoot>
+            <tr class="fila-margen">
+              <td colspan="3"><em>Margen imprevistos (5%)</em></td>
+              <td>—</td>
+              <td class="subtotal" id="margen-electricidad">$ 0</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -1608,6 +1618,13 @@
             <tr data-todo="60000" data-mano="60000"><td>Instalación de software / OS</td><td class="tipo-badge mo">Mano de obra</td><td class="todo-costo precio-unit">$ 60.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('soporte')"></td><td class="subtotal">$ 60.000</td></tr>
             <tr data-todo="30000" data-mano="0"><td>Antivirus / licencia</td><td class="tipo-badge otro">Otro</td><td class="todo-costo precio-unit">$ 30.000</td><td><input type="number" class="qty-input" value="1" min="0" onchange="recalcular('soporte')"></td><td class="subtotal">$ 30.000</td></tr>
           </tbody>
+          <tfoot>
+            <tr class="fila-margen">
+              <td colspan="3"><em>Margen imprevistos (5%)</em></td>
+              <td>—</td>
+              <td class="subtotal" id="margen-soporte">$ 0</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
