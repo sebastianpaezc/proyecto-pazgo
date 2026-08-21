@@ -449,7 +449,7 @@ function cbGenerarPDF(d) {
   doc.setFontSize(8);
   doc.text('* Precios estimados sujetos a confirmación en visita técnica.', margin, 153);
   doc.text('* El valor final puede variar según condiciones del lugar de instalación.', margin, 158);
-  doc.text('* El primer mantenimiento a partir de la fecha de entrega cuenta con 1 mes gratuito.', margin, 163);
+  doc.text('* El primer mantenimiento a partir de la fecha de entrega cuenta con 6 meses gratuitos.', margin, 163);
   doc.setTextColor(10, 100, 10);
   doc.setFont('helvetica','bold');
   doc.setFontSize(8);
