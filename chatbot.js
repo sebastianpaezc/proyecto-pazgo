@@ -223,6 +223,7 @@ const INTENT_MAP = [
 const cbState = {
   isOpen: false,
   hasShownWelcome: false,
+  processing: false,   // evita doble disparo de botones
   /*
    * Pasos del flujo de cotización:
    * idle → cot_subproducto → cot_modalidad →
@@ -340,6 +341,11 @@ function cbAddMessage(html, role = 'bot', options = []) {
       btn.textContent = o.label;
       btn.dataset.value = o.value;
       btn.addEventListener('click', () => {
+        // Evitar doble disparo
+        if (btn.dataset.clicked) return;
+        btn.dataset.clicked = '1';
+        optWrap.querySelectorAll('.cb-opt-btn').forEach(b => b.disabled = true);
+
         cbAddMessage(o.label, 'user');
         optWrap.remove();
         cbHandleIntent(o.value);
@@ -620,15 +626,10 @@ function cbInit() {
     });
 
     /* Captura clics en botones de opciones del catálogo (__sub_ / __mod_) */
-    document.addEventListener('click', e => {
-      const btn = e.target.closest('.cb-opt-btn');
-      if (!btn) return;
-      const val = btn.dataset.value || '';
-      if (!val.startsWith('__sub_') && !val.startsWith('__mod_')) return;
-      cbAddMessage(btn.textContent.trim(), 'user');
-      btn.closest('.cb-options')?.remove();
-      cbHandleIntent(val);
-    });
+    // NOTA: los botones __sub_ y __mod_ ya son manejados por el listener
+    // individual en cbAddMessage. Este listener global solo es un fallback
+    // para casos donde el botón no tenga listener propio.
+    // Se elimina para evitar doble disparo.
 
   }, 120);
 }
