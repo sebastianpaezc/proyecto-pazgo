@@ -1839,3 +1839,12 @@ body {
 [id^="page-cotizador-"] .inner-page-wrap {
     padding-bottom: 100px;
 }
+
+/* Reposicionar WhatsApp flotante para no tapar el chatbot */
+.wa-float {
+    bottom: 24px !important;
+    right: 100px !important;
+}
+@media (max-width: 460px) {
+    .wa-float { right: 16px !important; bottom: 90px !important; }
+}
