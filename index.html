@@ -66,66 +66,276 @@
       </div>
     </div>
     <div class="hero-img-wrap">
-      <!-- Contenedor combinado: imagen real + decoraciones SVG -->
-      <div class="hero-cam-combo">
+      <svg class="hero-cameras" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Degradados principales -->
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#d8dfe8"/>
+            <stop offset="40%" stop-color="#b8c4d0"/>
+            <stop offset="100%" stop-color="#8a9aaa"/>
+          </linearGradient>
+          <linearGradient id="bodyGradSide" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#c0ccd8"/>
+            <stop offset="50%" stop-color="#a8b8c8"/>
+            <stop offset="100%" stop-color="#788898"/>
+          </linearGradient>
+          <linearGradient id="lensOuter" cx="40%" cy="40%" r="50%" fx="35%" fy="35%" gradientUnits="objectBoundingBox" id="lensRad">
+            <stop offset="0%" stop-color="#3a4a5a"/>
+            <stop offset="60%" stop-color="#0d1520"/>
+            <stop offset="100%" stop-color="#050c14"/>
+          </linearGradient>
+          <radialGradient id="lensShine" cx="38%" cy="35%" r="55%" fx="32%" fy="28%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
+            <stop offset="40%" stop-color="#80c0ff" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="#000820" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="lensCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#1a2a3a"/>
+            <stop offset="70%" stop-color="#050d18"/>
+            <stop offset="100%" stop-color="#020810"/>
+          </radialGradient>
+          <radialGradient id="pupilShine" cx="35%" cy="30%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".6"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="mountGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#9aacbc"/>
+            <stop offset="100%" stop-color="#6a7a8a"/>
+          </linearGradient>
+          <linearGradient id="bracketGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#788898"/>
+            <stop offset="50%" stop-color="#9aaabb"/>
+            <stop offset="100%" stop-color="#788898"/>
+          </linearGradient>
+          <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1e2e42"/>
+            <stop offset="100%" stop-color="#0f1e30"/>
+          </linearGradient>
+          <linearGradient id="irRingGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#3a4a5a"/>
+            <stop offset="100%" stop-color="#1a2532"/>
+          </linearGradient>
+          <filter id="camShadow" x="-15%" y="-15%" width="130%" height="130%">
+            <feDropShadow dx="4" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".55"/>
+          </filter>
+          <filter id="glowCyan" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glowRed">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <!-- Clip para la cámara bala secundaria -->
+          <clipPath id="clipBullet">
+            <rect x="290" y="255" width="175" height="80" rx="10"/>
+          </clipPath>
+        </defs>
 
-        <!-- Decoraciones SVG de fondo (circuitos, haces de luz) -->
-        <svg class="hero-deco-svg" viewBox="0 0 420 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Edificio / fondo arquitectónico -->
-          <rect x="200" y="10" width="210" height="300" rx="8" fill="#1a2a3a" opacity=".55"/>
-          <rect x="215" y="28" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".7"/>
-          <rect x="308" y="28" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".7"/>
-          <rect x="215" y="100" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".7"/>
-          <rect x="308" y="100" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".7"/>
-          <rect x="215" y="172" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".5"/>
-          <rect x="308" y="172" width="75" height="55" rx="4" fill="#0d1b2a" opacity=".5"/>
-          <!-- Líneas de circuito decorativas -->
-          <line x1="30"  y1="80"  x2="90"  y2="80"  stroke="#00c8ff" stroke-width="1" opacity=".25" stroke-dasharray="5,4"/>
-          <line x1="90"  y1="80"  x2="90"  y2="140" stroke="#00c8ff" stroke-width="1" opacity=".2"  stroke-dasharray="5,4"/>
-          <line x1="350" y1="260" x2="410" y2="260" stroke="#00c8ff" stroke-width="1" opacity=".25" stroke-dasharray="5,4"/>
-          <line x1="350" y1="240" x2="350" y2="280" stroke="#00c8ff" stroke-width="1" opacity=".2"  stroke-dasharray="5,4"/>
-          <!-- Haces de luz cámara izquierda -->
-          <line x1="155" y1="238" x2="30"  y2="195" stroke="#00c8ff" stroke-width="1.2" opacity=".35" stroke-dasharray="5,4"/>
-          <line x1="155" y1="238" x2="25"  y2="265" stroke="#00c8ff" stroke-width="1.2" opacity=".35" stroke-dasharray="5,4"/>
-          <!-- Haces de luz cámara derecha (bala) -->
-          <line x1="348" y1="215" x2="415" y2="180" stroke="#00c8ff" stroke-width="1.2" opacity=".35" stroke-dasharray="5,4"/>
-          <line x1="348" y1="215" x2="415" y2="240" stroke="#00c8ff" stroke-width="1.2" opacity=".35" stroke-dasharray="5,4"/>
-          <!-- Nodos de circuito -->
-          <circle cx="30"  cy="195" r="3" fill="#00c8ff" opacity=".5"/>
-          <circle cx="25"  cy="265" r="3" fill="#00c8ff" opacity=".5"/>
-          <circle cx="415" cy="180" r="3" fill="#00c8ff" opacity=".5"/>
-          <circle cx="415" cy="240" r="3" fill="#00c8ff" opacity=".5"/>
-          <circle cx="170" cy="50"  r="4" fill="#00c8ff" opacity=".55"/>
-          <circle cx="188" cy="72"  r="2.5" fill="#00c8ff" opacity=".35"/>
-          <line x1="170" y1="50" x2="188" y2="72" stroke="#00c8ff" stroke-width="1" opacity=".3"/>
-          <circle cx="60"  cy="310" r="3" fill="#00c8ff" opacity=".4"/>
-          <circle cx="80"  cy="325" r="2" fill="#00c8ff" opacity=".25"/>
-          <line x1="60" y1="310" x2="80" y2="325" stroke="#00c8ff" stroke-width="1" opacity=".2"/>
-          <!-- Punto de scan / grabando -->
-          <circle cx="118" cy="62" r="5" fill="#e74c3c" opacity=".85"/>
-          <circle cx="118" cy="62" r="9" fill="#e74c3c" opacity=".2"/>
-          <text x="128" y="66" font-family="monospace" font-size="9" fill="#e74c3c" opacity=".9">REC</text>
-        </svg>
+        <!-- ══════════════ FONDO / PARED ══════════════ -->
+        <rect x="0" y="0" width="500" height="400" fill="url(#wallGrad)" rx="12" opacity=".0"/>
+        <!-- Panel decorativo de pared -->
+        <rect x="150" y="30" width="320" height="340" rx="10" fill="#162236" opacity=".6"/>
+        <rect x="165" y="48" width="90" height="68" rx="5" fill="#0c1828" opacity=".75"/>
+        <rect x="270" y="48" width="90" height="68" rx="5" fill="#0c1828" opacity=".75"/>
+        <rect x="375" y="48" width="80" height="68" rx="5" fill="#0c1828" opacity=".55"/>
+        <rect x="165" y="132" width="90" height="68" rx="5" fill="#0c1828" opacity=".7"/>
+        <rect x="270" y="132" width="90" height="68" rx="5" fill="#0c1828" opacity=".7"/>
+        <rect x="375" y="132" width="80" height="68" rx="5" fill="#0c1828" opacity=".5"/>
+        <rect x="165" y="216" width="90" height="68" rx="5" fill="#0c1828" opacity=".6"/>
+        <rect x="270" y="216" width="90" height="68" rx="5" fill="#0c1828" opacity=".6"/>
+        <rect x="375" y="216" width="80" height="68" rx="5" fill="#0c1828" opacity=".45"/>
+        <rect x="165" y="300" width="90" height="55" rx="5" fill="#0c1828" opacity=".5"/>
+        <rect x="270" y="300" width="90" height="55" rx="5" fill="#0c1828" opacity=".5"/>
 
-        <!-- Imagen real de cámara de seguridad (domo, grande) -->
-        <img
-          src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=420&q=80&auto=format&fit=crop"
-          alt="Cámara de seguridad domo profesional"
-          class="hero-cam-real hero-cam-main"
-          loading="eager"
-          onerror="this.style.display='none'"
-        />
+        <!-- ══════════════ LÍNEAS DE CIRCUITO / DECORACIÓN ══════════════ -->
+        <!-- Haz de visión izquierdo (desde lente) -->
+        <polygon points="52,168 10,100 10,236" fill="#00c8ff" opacity=".06"/>
+        <line x1="52" y1="140" x2="8"  y2="80"  stroke="#00c8ff" stroke-width="1" opacity=".4" stroke-dasharray="6,4"/>
+        <line x1="52" y1="195" x2="8"  y2="260" stroke="#00c8ff" stroke-width="1" opacity=".4" stroke-dasharray="6,4"/>
+        <!-- Nodos izquierda -->
+        <circle cx="8"   cy="80"  r="3.5" fill="#00c8ff" opacity=".55" filter="url(#glowCyan)"/>
+        <circle cx="8"   cy="260" r="3.5" fill="#00c8ff" opacity=".55" filter="url(#glowCyan)"/>
+        <!-- Líneas de circuito decorativas -->
+        <line x1="155" y1="380" x2="240" y2="380" stroke="#00c8ff" stroke-width="1" opacity=".2" stroke-dasharray="5,4"/>
+        <line x1="240" y1="380" x2="240" y2="350" stroke="#00c8ff" stroke-width="1" opacity=".2" stroke-dasharray="5,4"/>
+        <circle cx="240" cy="350" r="3" fill="#00c8ff" opacity=".3"/>
+        <line x1="430" y1="20" x2="490" y2="20" stroke="#00c8ff" stroke-width="1" opacity=".2" stroke-dasharray="5,4"/>
+        <line x1="490" y1="20" x2="490" y2="60" stroke="#00c8ff" stroke-width="1" opacity=".2" stroke-dasharray="5,4"/>
+        <circle cx="430" cy="20" r="3" fill="#00c8ff" opacity=".3"/>
+        <!-- Nodo scan pequeño decorativo -->
+        <circle cx="390" cy="365" r="2.5" fill="#00c8ff" opacity=".4"/>
+        <line x1="390" y1="365" x2="420" y2="355" stroke="#00c8ff" stroke-width=".8" opacity=".25"/>
+        <circle cx="420" cy="355" r="2" fill="#00c8ff" opacity=".3"/>
 
-        <!-- Imagen real cámara bala (pequeña, esquina inferior derecha) -->
-        <img
-          src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=260&q=75&auto=format&fit=crop"
-          alt="Cámara de seguridad tipo bala"
-          class="hero-cam-real hero-cam-bullet"
-          loading="eager"
-          onerror="this.style.display='none'"
-        />
+        <!-- ══════════════ SOPORTE DE PARED (bracket) ══════════════ -->
+        <!-- Placa de pared -->
+        <rect x="118" y="52" width="52" height="80" rx="7" fill="url(#mountGrad)" filter="url(#camShadow)"/>
+        <rect x="121" y="55" width="46" height="74" rx="5" fill="url(#bracketGrad)" opacity=".6"/>
+        <!-- Tornillos placa -->
+        <circle cx="131" cy="66" r="5" fill="#8a9aaa" stroke="#6a7a8a" stroke-width="1"/>
+        <line x1="128" y1="66" x2="134" y2="66" stroke="#5a6a7a" stroke-width="1.2"/>
+        <line x1="131" y1="63" x2="131" y2="69" stroke="#5a6a7a" stroke-width="1.2"/>
+        <circle cx="158" cy="66" r="5" fill="#8a9aaa" stroke="#6a7a8a" stroke-width="1"/>
+        <line x1="155" y1="66" x2="161" y2="66" stroke="#5a6a7a" stroke-width="1.2"/>
+        <line x1="158" y1="63" x2="158" y2="69" stroke="#5a6a7a" stroke-width="1.2"/>
+        <circle cx="131" cy="116" r="5" fill="#8a9aaa" stroke="#6a7a8a" stroke-width="1"/>
+        <line x1="128" y1="116" x2="134" y2="116" stroke="#5a6a7a" stroke-width="1.2"/>
+        <line x1="131" y1="113" x2="131" y2="119" stroke="#5a6a7a" stroke-width="1.2"/>
+        <circle cx="158" cy="116" r="5" fill="#8a9aaa" stroke="#6a7a8a" stroke-width="1"/>
+        <line x1="155" y1="116" x2="161" y2="116" stroke="#5a6a7a" stroke-width="1.2"/>
+        <line x1="158" y1="113" x2="158" y2="119" stroke="#5a6a7a" stroke-width="1.2"/>
+        <!-- Articulación / brazo -->
+        <rect x="138" y="126" width="20" height="38" rx="5" fill="url(#mountGrad)"/>
+        <rect x="140" y="128" width="16" height="34" rx="4" fill="url(#bracketGrad)" opacity=".5"/>
+        <!-- Pivote -->
+        <circle cx="148" cy="162" r="10" fill="#8a9aaa" stroke="#6a7a8a" stroke-width="1.5"/>
+        <circle cx="148" cy="162" r="6"  fill="#6a7a8a"/>
+        <circle cx="148" cy="162" r="3"  fill="#4a5a6a"/>
 
-      </div>
+        <!-- ══════════════ CÁMARA BALA PRINCIPAL (grande) ══════════════ -->
+        <g filter="url(#camShadow)" transform="rotate(-8, 240, 168)">
+          <!-- Cuerpo principal de la cámara -->
+          <rect x="52" y="140" width="245" height="56" rx="14" fill="url(#bodyGrad)"/>
+          <!-- Cara inferior (profundidad) -->
+          <rect x="55" y="192" width="241" height="8" rx="0" fill="#788898" opacity=".8"/>
+          <!-- Nervaduras / costillas decorativas en el cuerpo -->
+          <rect x="100" y="143" width="3" height="50" rx="1" fill="#c0ccd8" opacity=".5"/>
+          <rect x="115" y="143" width="3" height="50" rx="1" fill="#c0ccd8" opacity=".5"/>
+          <rect x="130" y="143" width="3" height="50" rx="1" fill="#c0ccd8" opacity=".5"/>
+          <rect x="145" y="143" width="3" height="50" rx="1" fill="#c0ccd8" opacity=".4"/>
+          <!-- Panel trasero / conector -->
+          <rect x="272" y="148" width="24" height="40" rx="6" fill="#9aaabb" stroke="#788898" stroke-width="1"/>
+          <!-- Conector de cable -->
+          <rect x="288" y="158" width="14" height="20" rx="4" fill="#6a7a8a"/>
+          <circle cx="295" cy="168" r="5" fill="#4a5a6a" stroke="#3a4a5a" stroke-width="1"/>
+          <circle cx="295" cy="168" r="2.5" fill="#2a3440"/>
+          <!-- Tornillos del cuerpo -->
+          <circle cx="270" cy="155" r="4" fill="#9aaabb" stroke="#788898" stroke-width="1"/>
+          <line x1="267.5" y1="155" x2="272.5" y2="155" stroke="#6a7a8a" stroke-width="1"/>
+          <line x1="270" y1="152.5" x2="270" y2="157.5" stroke="#6a7a8a" stroke-width="1"/>
+          <circle cx="270" cy="181" r="4" fill="#9aaabb" stroke="#788898" stroke-width="1"/>
+          <line x1="267.5" y1="181" x2="272.5" y2="181" stroke="#6a7a8a" stroke-width="1"/>
+          <line x1="270" y1="178.5" x2="270" y2="183.5" stroke="#6a7a8a" stroke-width="1"/>
+          <!-- Texto grabado en el cuerpo -->
+          <text x="175" y="172" font-family="'Courier New', monospace" font-size="7.5" fill="#8090a0" opacity=".85" text-anchor="middle" letter-spacing="1.5">HD · 4K · IP66</text>
+
+          <!-- ── Cabezal frontal con anillo IR ── -->
+          <!-- Cuerpo del cabezal -->
+          <rect x="52" y="136" width="75" height="64" rx="16" fill="url(#bodyGradSide)"/>
+          <!-- Anillo exterior IR (aro oscuro) -->
+          <circle cx="80" cy="168" r="30" fill="url(#irRingGrad)" stroke="#2a3a4a" stroke-width="1.5"/>
+          <!-- LEDs IR en anillo (12 puntos) -->
+          <circle cx="80"    cy="138.5" r="3.2" fill="#cc4400" opacity=".9" filter="url(#glowRed)"/>
+          <circle cx="94.5"  cy="143"   r="3.2" fill="#cc4400" opacity=".9" filter="url(#glowRed)"/>
+          <circle cx="104"   cy="155"   r="3.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="104"   cy="181"   r="3.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="94.5"  cy="193"   r="3.2" fill="#cc4400" opacity=".9" filter="url(#glowRed)"/>
+          <circle cx="80"    cy="197.5" r="3.2" fill="#cc4400" opacity=".9" filter="url(#glowRed)"/>
+          <circle cx="65.5"  cy="193"   r="3.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="56"    cy="181"   r="3.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="56"    cy="155"   r="3.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="65.5"  cy="143"   r="3.2" fill="#cc4400" opacity=".9" filter="url(#glowRed)"/>
+          <!-- Anillo separador metálico -->
+          <circle cx="80" cy="168" r="21" fill="none" stroke="#4a5a6a" stroke-width="2.5"/>
+          <circle cx="80" cy="168" r="18" fill="none" stroke="#2a3a4a" stroke-width="1"/>
+          <!-- Lente principal -->
+          <circle cx="80" cy="168" r="16" fill="url(#lensCore)"/>
+          <!-- Anillo óptico del lente -->
+          <circle cx="80" cy="168" r="16" fill="none" stroke="#3a5a7a" stroke-width="2"/>
+          <circle cx="80" cy="168" r="13" fill="none" stroke="#1a3050" stroke-width="1"/>
+          <!-- Iris / apertura -->
+          <circle cx="80" cy="168" r="10" fill="#020810"/>
+          <circle cx="80" cy="168" r="6.5" fill="#040f1a"/>
+          <circle cx="80" cy="168" r="3.5" fill="#000508"/>
+          <!-- Reflejo / brillo del lente -->
+          <circle cx="80" cy="168" r="16" fill="url(#lensShine)"/>
+          <!-- Punto de reflexión de luz -->
+          <ellipse cx="72" cy="161" rx="4" ry="3" fill="white" opacity=".22" transform="rotate(-20,72,161)"/>
+          <circle cx="73" cy="162" r="1.5" fill="white" opacity=".45"/>
+        </g>
+
+        <!-- ══════════════ CÁMARA BALA SECUNDARIA (pequeña, abajo derecha) ══════════════ -->
+        <g transform="translate(290,255) rotate(-5,87,40)" filter="url(#camShadow)" opacity=".95">
+          <!-- Soporte pequeño -->
+          <rect x="72" y="0" width="18" height="28" rx="4" fill="url(#mountGrad)" opacity=".9"/>
+          <circle cx="81" cy="26" r="7" fill="#7a8a9a" stroke="#5a6a7a" stroke-width="1"/>
+          <circle cx="81" cy="26" r="4" fill="#5a6a7a"/>
+          <!-- Cuerpo bala pequeña -->
+          <rect x="12" y="18" width="140" height="40" rx="10" fill="url(#bodyGrad)"/>
+          <rect x="14" y="54" width="138" height="6" rx="0" fill="#788898" opacity=".7"/>
+          <!-- Nervaduras -->
+          <rect x="70"  y="20" width="2.5" height="36" rx="1" fill="#c0ccd8" opacity=".45"/>
+          <rect x="84"  y="20" width="2.5" height="36" rx="1" fill="#c0ccd8" opacity=".45"/>
+          <rect x="98"  y="20" width="2.5" height="36" rx="1" fill="#c0ccd8" opacity=".4"/>
+          <!-- Conector trasero -->
+          <rect x="142" y="23" width="16" height="30" rx="5" fill="#9aaabb" stroke="#788898" stroke-width="1"/>
+          <circle cx="150" cy="38" r="4" fill="#4a5a6a" stroke="#3a4a5a" stroke-width="1"/>
+          <!-- Texto -->
+          <text x="100" y="41" font-family="'Courier New', monospace" font-size="6" fill="#8090a0" opacity=".8" text-anchor="middle" letter-spacing="1">HD · IP66</text>
+          <!-- Cabezal frontal pequeño -->
+          <rect x="12" y="15" width="52" height="46" rx="12" fill="url(#bodyGradSide)"/>
+          <!-- Anillo IR pequeño -->
+          <circle cx="36" cy="38" r="21" fill="url(#irRingGrad)" stroke="#2a3a4a" stroke-width="1.2"/>
+          <!-- LEDs pequeños -->
+          <circle cx="36"   cy="17.5" r="2.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="46.8" cy="21"   r="2.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="53"   cy="30.5" r="2.2" fill="#cc4400" opacity=".8" filter="url(#glowRed)"/>
+          <circle cx="53"   cy="45.5" r="2.2" fill="#cc4400" opacity=".8" filter="url(#glowRed)"/>
+          <circle cx="46.8" cy="55"   r="2.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="36"   cy="58.5" r="2.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <circle cx="25.2" cy="55"   r="2.2" fill="#cc4400" opacity=".8" filter="url(#glowRed)"/>
+          <circle cx="19"   cy="45.5" r="2.2" fill="#cc4400" opacity=".8" filter="url(#glowRed)"/>
+          <circle cx="19"   cy="30.5" r="2.2" fill="#cc4400" opacity=".8" filter="url(#glowRed)"/>
+          <circle cx="25.2" cy="21"   r="2.2" fill="#cc4400" opacity=".85" filter="url(#glowRed)"/>
+          <!-- Anillo metálico separador -->
+          <circle cx="36" cy="38" r="15" fill="none" stroke="#4a5a6a" stroke-width="2"/>
+          <circle cx="36" cy="38" r="12" fill="none" stroke="#2a3a4a" stroke-width="1"/>
+          <!-- Lente pequeña -->
+          <circle cx="36" cy="38" r="10" fill="url(#lensCore)"/>
+          <circle cx="36" cy="38" r="10" fill="none" stroke="#3a5a7a" stroke-width="1.5"/>
+          <circle cx="36" cy="38" r="7"  fill="#020810"/>
+          <circle cx="36" cy="38" r="4"  fill="#040f1a"/>
+          <circle cx="36" cy="38" r="2"  fill="#000508"/>
+          <circle cx="36" cy="38" r="10" fill="url(#lensShine)"/>
+          <ellipse cx="30" cy="33" rx="3" ry="2.2" fill="white" opacity=".2" transform="rotate(-20,30,33)"/>
+          <circle cx="31" cy="34" r="1.2" fill="white" opacity=".42"/>
+        </g>
+
+        <!-- ══════════════ INDICADOR REC ══════════════ -->
+        <circle cx="124" cy="52" r="6" fill="#e74c3c" opacity=".9" filter="url(#glowRed)"/>
+        <circle cx="124" cy="52" r="10" fill="#e74c3c" opacity=".15"/>
+        <text x="135" y="57" font-family="'Courier New', monospace" font-size="11" fill="#e74c3c" opacity=".95" letter-spacing="1">REC</text>
+
+        <!-- ══════════════ ELEMENTO: VISOR / PANTALLA MONITOR PEQUEÑO ══════════════ -->
+        <!-- Marco del mini monitor -->
+        <rect x="340" y="55" width="120" height="88" rx="8" fill="#1a2a3a" stroke="#3a5a7a" stroke-width="1.5"/>
+        <rect x="345" y="60" width="110" height="75" rx="5" fill="#0a1420"/>
+        <!-- Imagen en pantalla: simulación de cuadros CCTV -->
+        <rect x="346" y="61" width="54"  height="36" rx="2" fill="#0d1f30"/>
+        <rect x="402" y="61" width="52"  height="36" rx="2" fill="#0d1f30"/>
+        <rect x="346" y="99" width="54"  height="35" rx="2" fill="#0d1f30"/>
+        <rect x="402" y="99" width="52"  height="35" rx="2" fill="#0d1f30"/>
+        <!-- Cruz divisoria pantalla -->
+        <line x1="399" y1="61" x2="399" y2="135" stroke="#1e3048" stroke-width="1.5"/>
+        <line x1="346" y1="97" x2="453" y2="97" stroke="#1e3048" stroke-width="1.5"/>
+        <!-- Puntos de movimiento en cuadros -->
+        <circle cx="370" cy="78" r="4" fill="#00c8ff" opacity=".35"/>
+        <circle cx="424" cy="112" r="3.5" fill="#00c8ff" opacity=".3"/>
+        <circle cx="355" cy="115" r="3" fill="#00c8ff" opacity=".25"/>
+        <circle cx="438" cy="72" r="3" fill="#00c8ff" opacity=".25"/>
+        <!-- Timestamp monitor -->
+        <text x="350" y="131" font-family="monospace" font-size="6.5" fill="#00c8ff" opacity=".7">CH1 · 720P</text>
+        <text x="406" y="131" font-family="monospace" font-size="6.5" fill="#00c8ff" opacity=".7">CH2 · 1080P</text>
+        <text x="350" y="92" font-family="monospace" font-size="6.5" fill="#00c8ff" opacity=".55">00:14:37</text>
+        <text x="407" y="92" font-family="monospace" font-size="6.5" fill="#00c8ff" opacity=".55">00:14:37</text>
+        <!-- LED de encendido monitor -->
+        <circle cx="400" cy="147" r="3" fill="#2ecc71" opacity=".85"/>
+        <circle cx="400" cy="147" r="5" fill="#2ecc71" opacity=".2"/>
+        <!-- Pie del monitor -->
+        <rect x="388" y="143" width="24" height="5" rx="2" fill="#2a3a4a"/>
+
+      </svg>
     </div>
   </section>
 
