@@ -449,6 +449,11 @@ function cbGenerarPDF(d) {
   doc.setFontSize(8);
   doc.text('* Precios estimados sujetos a confirmación en visita técnica.', margin, 153);
   doc.text('* El valor final puede variar según condiciones del lugar de instalación.', margin, 158);
+  doc.text('* El primer mantenimiento a partir de la fecha de entrega cuenta con 1 mes gratuito.', margin, 163);
+  doc.setTextColor(10, 100, 10);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(8);
+  doc.text('★ Garantía: El trabajo realizado tiene garantía de 1 año.', margin, 169);
 
   // Footer
   doc.setFillColor(10,22,40);
