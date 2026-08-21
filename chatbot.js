@@ -345,10 +345,11 @@ function cbAddMessage(html, role = 'bot', options = []) {
         if (btn.dataset.clicked) return;
         btn.dataset.clicked = '1';
         optWrap.querySelectorAll('.cb-opt-btn').forEach(b => b.disabled = true);
-
-        cbAddMessage(o.label, 'user');
         optWrap.remove();
-        cbHandleIntent(o.value);
+
+        // Un solo canal: todo pasa por cbProcessMessage
+        // Se pasa el value como "texto interno" para que el flujo lo capture
+        cbProcessMessage(o.value);
       });
       optWrap.appendChild(btn);
     });
@@ -544,35 +545,60 @@ function cbEnviarCotizacion() {
 }
 
 /* ── 14. PROCESAMIENTO DE MENSAJE DEL USUARIO ────────────── */
-function cbProcessMessage(raw) {
-  const text = raw.trim();
-  if (!text) return;
 
-  cbAddMessage(text, 'user');
+// Mapa de values internos → label legible para mostrar al usuario
+const CB_LABELS = {
+  'servicios':'🛠️ Servicios', 'cotizar':'💰 Solicitar cotización',
+  'horarios':'🕐 Horarios', 'contacto':'📞 Contacto', 'cobertura':'📍 Cobertura',
+  'wa':'💬 Ir a WhatsApp', 'menu':'🏠 Menú', 'gracias':'¡Gracias!',
+  'info_camaras':'📹 Cámaras', 'info_alarmas':'🔔 Alarmas',
+  'info_redes':'🌐 Redes', 'info_electricidad':'⚡ Electricidad',
+  'info_acceso':'🔐 Control acceso', 'info_soporte':'💻 Soporte',
+  'cotizar_camaras':'📹 Cotizar Cámaras', 'cotizar_alarmas':'🔔 Cotizar Alarmas',
+  'cotizar_redes':'🌐 Cotizar Redes', 'cotizar_electricidad':'⚡ Cotizar Electricidad',
+  'cotizar_acceso':'🔐 Cotizar Control acceso', 'cotizar_soporte':'💻 Cotizar Soporte',
+  '__mod_todo':'🏗️ Todo costo — Materiales + Mano de obra',
+  '__mod_mano':'🔧 Solo mano de obra — Yo pongo los materiales',
+};
+
+function cbGetLabel(value) {
+  if (CB_LABELS[value]) return CB_LABELS[value];
+  if (value.startsWith('__sub_')) {
+    // Extraer nombre legible del producto
+    try { return decodeURIComponent(value.replace('__sub_', '')).split('(')[0].trim(); }
+    catch { return value; }
+  }
+  return value;
+}
+
+function cbProcessMessage(raw) {
+  const value = raw.trim();
+  if (!value) return;
+
+  // Mostrar siempre el label legible, nunca el value interno
+  const displayText = cbGetLabel(value);
+  cbAddMessage(displayText, 'user');
+
   const input = document.getElementById('cb-input');
   if (input) input.value = '';
 
-  /* Estamos en un paso del flujo de cotización */
-  if (cbState.step !== 'idle') {
-    /* Selección de subproducto por botón */
-    if (cbState.step === 'cot_subproducto') {
-      cbState.cotData.producto = text;
-      cbState.step = 'cot_modalidad';
-      cbBotRespond(
-        `Excelente elección: <b>${text}</b> ✅\n\n¿Cómo prefieres el servicio?`,
-        [
-          { label: '🏗️ Todo costo — Materiales + Mano de obra',       value: '__mod_todo'  },
-          { label: '🔧 Solo mano de obra — Yo pongo los materiales',   value: '__mod_mano'  },
-        ]
-      );
-      return;
-    }
-    cbHandleCotStep(text);
+  /* — Prefijos internos: van directo a cbHandleIntent — */
+  if (value.startsWith('__sub_') || value.startsWith('__mod_') ||
+      value.startsWith('cotizar_') || value.startsWith('info_') ||
+      ['wa','menu','horarios','contacto','cobertura','servicios',
+       'cotizar','gracias'].includes(value)) {
+    cbHandleIntent(value);
     return;
   }
 
-  /* Detección de intención libre */
-  const intent = cbDetectIntent(text);
+  /* — Estamos en un paso de texto libre del flujo de cotización — */
+  if (cbState.step !== 'idle') {
+    cbHandleCotStep(value);
+    return;
+  }
+
+  /* — Texto libre del usuario — */
+  const intent = cbDetectIntent(value);
   cbHandleIntent(intent || '__unknown__');
 }
 
