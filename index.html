@@ -659,6 +659,23 @@
     <button class="btn-back" onclick="showPage('inicio')">&#8592; Volver</button>
     <h2 class="inner-title">Solicitar Cotización</h2>
     <p class="inner-sub">Completa el formulario y nos comunicaremos contigo a la brevedad.</p>
+
+    <!-- RESUMEN DE SELECCIÓN (visible cuando viene desde catálogo) -->
+    <div class="cot-seleccion-resumen" id="cot-resumen" style="display:none;">
+      <div class="cot-seleccion-inner">
+        <span class="cot-seleccion-icon">📋</span>
+        <div class="cot-seleccion-texto">
+          <p class="cot-seleccion-titulo">Resumen de tu solicitud</p>
+          <p class="cot-seleccion-detalle">
+            <strong>Servicio:</strong> <span id="cot-resumen-servicio">—</span>
+          </p>
+          <p class="cot-seleccion-detalle">
+            <strong>Se requiere:</strong> <span id="cot-resumen-tipo">—</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
     <form class="inner-form" id="formCotizacion" onsubmit="handleCotizacion(event)">
       <div class="form-row-2">
         <div class="fgroup"><label>Nombre completo</label><input type="text" id="cot-nombre" placeholder="Tu nombre" required/></div>
@@ -670,6 +687,9 @@
           <select id="cot-servicio" required><option value="" disabled selected>Selecciona un servicio</option><option>Cámaras de seguridad</option><option>Alarmas</option><option>Redes y conectividad</option><option>Electricidad y automatización</option><option>Soporte técnico</option><option>Desarrollo web</option><option>Otro</option></select>
         </div>
       </div>
+      <!-- Campo tipo oculto que se llena automáticamente -->
+      <input type="hidden" id="cot-tipo-servicio" value=""/>
+      <input type="hidden" id="cot-opcion-servicio" value=""/>
       <div class="fgroup full"><label>Cuéntanos tu necesidad</label><textarea id="cot-mensaje" rows="5" placeholder="Describe tu proyecto o necesidad..." required></textarea></div>
       <button type="submit" class="btn-enviar">Enviar solicitud ✈</button>
     </form>
@@ -794,6 +814,18 @@
         <p class="inner-sub">Soluciones de videovigilancia para hogares, negocios y conjuntos residenciales.</p>
       </div>
     </div>
+    <!-- SELECTOR TIPO SERVICIO -->
+    <div class="tipo-servicio-selector" id="selector-camaras">
+      <p class="tipo-servicio-label">¿Qué tipo de servicio necesitas?</p>
+      <div class="tipo-servicio-btns">
+        <button class="btn-tipo active" id="camaras-tipo-instalacion" onclick="seleccionarTipo('camaras','instalacion')">
+          Instalación
+        </button>
+        <button class="btn-tipo" id="camaras-tipo-mantenimiento" onclick="seleccionarTipo('camaras','mantenimiento')">
+          Mantenimiento
+        </button>
+      </div>
+    </div>
     <div class="catalogo-grid">
 
       <div class="prod-card">
@@ -812,7 +844,7 @@
           <span class="prod-tag cam-tag">Domo</span>
           <h4>Cámara Domo HD</h4>
           <p>Vigilancia 360° interior. Resolución 2MP, visión nocturna 20m, IP66.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('camaras', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('camaras')">Cotizar</button>
         </div>
       </div>
 
@@ -831,7 +863,7 @@
           <span class="prod-tag cam-tag">Bala</span>
           <h4>Cámara Bala 4MP</h4>
           <p>Exterior resistente, zoom óptico 4x, visión nocturna 40m, IP67.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('camaras', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('camaras')">Cotizar</button>
         </div>
       </div>
 
@@ -850,7 +882,7 @@
           <span class="prod-tag cam-tag">PTZ</span>
           <h4>Cámara PTZ 360°</h4>
           <p>Giro panorámico motorizado, zoom 20x, seguimiento automático.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('camaras', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('camaras')">Cotizar</button>
         </div>
       </div>
 
@@ -870,7 +902,7 @@
           <span class="prod-tag cam-tag">IP Wi-Fi</span>
           <h4>Cámara IP Inalámbrica</h4>
           <p>Conexión Wi-Fi 2.4/5GHz, app móvil, detección de movimiento y alertas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('camaras', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('camaras')">Cotizar</button>
         </div>
       </div>
 
@@ -890,7 +922,7 @@
           <span class="prod-tag cam-tag">DVR / NVR</span>
           <h4>Grabador DVR/NVR 8CH</h4>
           <p>Almacenamiento local 1TB, grabación continua 24/7, acceso remoto.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('camaras', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('camaras')">Cotizar</button>
         </div>
       </div>
 
@@ -898,7 +930,7 @@
     <div class="catalogo-cta">
       <p>¿No encontraste lo que buscas? Tenemos más opciones disponibles.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-        <button class="btn btn-solid" onclick="abrirCotizador('camaras', null)">Solicitar Cotización</button>
+        <button class="btn btn-solid" onclick="cotizarDesdeCatalogo('camaras')">Solicitar Cotización</button>
         <button class="btn btn-outline-dark" onclick="showPage('servicios')">Ver todos los servicios</button>
       </div>
     </div>
@@ -915,6 +947,18 @@
       <div>
         <h2 class="inner-title">Alarmas</h2>
         <p class="inner-sub">Sistemas de alarma inalámbricos y cableados para mayor protección y tranquilidad.</p>
+      </div>
+    </div>
+    <!-- SELECTOR TIPO SERVICIO -->
+    <div class="tipo-servicio-selector" id="selector-alarmas">
+      <p class="tipo-servicio-label">¿Qué tipo de servicio necesitas?</p>
+      <div class="tipo-servicio-btns">
+        <button class="btn-tipo active" id="alarmas-tipo-instalacion" onclick="seleccionarTipo('alarmas','instalacion')">
+          Instalación
+        </button>
+        <button class="btn-tipo" id="alarmas-tipo-mantenimiento" onclick="seleccionarTipo('alarmas','mantenimiento')">
+          Mantenimiento
+        </button>
       </div>
     </div>
     <div class="catalogo-grid">
@@ -936,7 +980,7 @@
           <span class="prod-tag alarm-tag">Panel</span>
           <h4>Panel de Alarma Inalámbrico</h4>
           <p>Central con batería de respaldo, comunicación GSM/Wi-Fi, hasta 64 zonas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('alarmas', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('alarmas')">Cotizar</button>
         </div>
       </div>
 
@@ -954,7 +998,7 @@
           <span class="prod-tag alarm-tag">Sensor</span>
           <h4>Sensor de Movimiento PIR</h4>
           <p>Detección infrarroja pasiva, ángulo 110°, cobertura 12m, inmune a mascotas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('alarmas', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('alarmas')">Cotizar</button>
         </div>
       </div>
 
@@ -975,7 +1019,7 @@
           <span class="prod-tag alarm-tag">Magnético</span>
           <h4>Sensor Magnético Puerta/Ventana</h4>
           <p>Detección de apertura instantánea, inalámbrico, batería 3 años.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('alarmas', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('alarmas')">Cotizar</button>
         </div>
       </div>
 
@@ -994,7 +1038,7 @@
           <span class="prod-tag alarm-tag">Sirena</span>
           <h4>Sirena Exterior 110dB</h4>
           <p>Alarma sonora y visual (estroboscópica), resistente al agua IP65.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('alarmas', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('alarmas')">Cotizar</button>
         </div>
       </div>
 
@@ -1013,7 +1057,7 @@
           <span class="prod-tag alarm-tag">Teclado</span>
           <h4>Teclado LCD con Proximidad</h4>
           <p>Activación por código o tarjeta RFID, retroiluminado, silencioso.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('alarmas', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('alarmas')">Cotizar</button>
         </div>
       </div>
 
@@ -1021,7 +1065,7 @@
     <div class="catalogo-cta">
       <p>¿Necesitas un sistema completo con instalación incluida?</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-        <button class="btn btn-solid" onclick="abrirCotizador('alarmas', null)">Solicitar Cotización</button>
+        <button class="btn btn-solid" onclick="cotizarDesdeCatalogo('alarmas')">Solicitar Cotización</button>
         <button class="btn btn-outline-dark" onclick="showPage('servicios')">Ver todos los servicios</button>
       </div>
     </div>
@@ -1038,6 +1082,18 @@
       <div>
         <h2 class="inner-title">Redes y Conectividad</h2>
         <p class="inner-sub">Instalación y configuración de redes, cableado estructurado y Wi-Fi.</p>
+      </div>
+    </div>
+    <!-- SELECTOR TIPO SERVICIO -->
+    <div class="tipo-servicio-selector" id="selector-redes">
+      <p class="tipo-servicio-label">¿Qué tipo de servicio necesitas?</p>
+      <div class="tipo-servicio-btns">
+        <button class="btn-tipo active" id="redes-tipo-instalacion" onclick="seleccionarTipo('redes','instalacion')">
+          Instalación
+        </button>
+        <button class="btn-tipo" id="redes-tipo-mantenimiento" onclick="seleccionarTipo('redes','mantenimiento')">
+          Mantenimiento
+        </button>
       </div>
     </div>
     <div class="catalogo-grid">
@@ -1060,7 +1116,7 @@
           <span class="prod-tag net-tag">Router</span>
           <h4>Router Wi-Fi 6 Dual Band</h4>
           <p>Velocidad 3Gbps, cobertura 200m², MU-MIMO, hasta 128 dispositivos.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('redes', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('redes')">Cotizar</button>
         </div>
       </div>
 
@@ -1081,7 +1137,7 @@
           <span class="prod-tag net-tag">Switch</span>
           <h4>Switch Administrable 24 Puertos</h4>
           <p>Gigabit PoE+, VLAN, QoS, gestión web, ideal para oficinas y empresas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('redes', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('redes')">Cotizar</button>
         </div>
       </div>
 
@@ -1101,7 +1157,7 @@
           <span class="prod-tag net-tag">Mesh</span>
           <h4>Sistema Wi-Fi Mesh (3 nodos)</h4>
           <p>Cobertura sin puntos ciegos hasta 500m², roaming automático.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('redes', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('redes')">Cotizar</button>
         </div>
       </div>
 
@@ -1121,7 +1177,7 @@
           <span class="prod-tag net-tag">Cableado</span>
           <h4>Cableado Estructurado Cat6</h4>
           <p>Instalación de puntos de red certificados, patch panel y canaletas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('redes', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('redes')">Cotizar</button>
         </div>
       </div>
 
@@ -1142,7 +1198,7 @@
           <span class="prod-tag net-tag">Seguridad</span>
           <h4>Firewall / UTM Empresarial</h4>
           <p>Protección perimetral, VPN, control de contenido y monitoreo en tiempo real.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('redes', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('redes')">Cotizar</button>
         </div>
       </div>
 
@@ -1150,7 +1206,7 @@
     <div class="catalogo-cta">
       <p>¿Necesitas una red profesional para tu empresa u hogar?</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-        <button class="btn btn-solid" onclick="abrirCotizador('redes', null)">Solicitar Cotización</button>
+        <button class="btn btn-solid" onclick="cotizarDesdeCatalogo('redes')">Solicitar Cotización</button>
         <button class="btn btn-outline-dark" onclick="showPage('servicios')">Ver todos los servicios</button>
       </div>
     </div>
@@ -1167,6 +1223,18 @@
       <div>
         <h2 class="inner-title">Electricidad y Automatización</h2>
         <p class="inner-sub">Instalaciones eléctricas, automatización de accesos y soluciones inteligentes.</p>
+      </div>
+    </div>
+    <!-- SELECTOR TIPO SERVICIO -->
+    <div class="tipo-servicio-selector" id="selector-electricidad">
+      <p class="tipo-servicio-label">¿Qué tipo de servicio necesitas?</p>
+      <div class="tipo-servicio-btns">
+        <button class="btn-tipo active" id="electricidad-tipo-instalacion" onclick="seleccionarTipo('electricidad','instalacion')">
+          Instalación
+        </button>
+        <button class="btn-tipo" id="electricidad-tipo-mantenimiento" onclick="seleccionarTipo('electricidad','mantenimiento')">
+          Mantenimiento
+        </button>
       </div>
     </div>
     <div class="catalogo-grid">
@@ -1186,7 +1254,7 @@
           <span class="prod-tag elec-tag">Eléctrico</span>
           <h4>Tablero Eléctrico Residencial</h4>
           <p>Instalación de centro de carga, breakers y puesta a tierra certificada NTC.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('electricidad', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('electricidad')">Cotizar</button>
         </div>
       </div>
 
@@ -1206,7 +1274,7 @@
           <span class="prod-tag elec-tag">Acceso</span>
           <h4>Cerradura Eléctrica Biométrica</h4>
           <p>Apertura por huella, PIN o tarjeta RFID, registros de acceso y app móvil.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('electricidad', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('electricidad')">Cotizar</button>
         </div>
       </div>
 
@@ -1228,7 +1296,7 @@
           <span class="prod-tag elec-tag">Control</span>
           <h4>Automatización de Acceso Vehicular</h4>
           <p>Barrera o puerta automática con control remoto, sensor de presencia.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('electricidad', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('electricidad')">Cotizar</button>
         </div>
       </div>
 
@@ -1245,7 +1313,7 @@
           <span class="prod-tag elec-tag">Smart Home</span>
           <h4>Iluminación Inteligente</h4>
           <p>Bombillas y dimmer smart, control por voz o app, programación horaria.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('electricidad', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('electricidad')">Cotizar</button>
         </div>
       </div>
 
@@ -1266,7 +1334,7 @@
           <span class="prod-tag elec-tag">UPS</span>
           <h4>UPS / Regulador de Voltaje</h4>
           <p>Protección contra cortes y picos de voltaje, respaldo hasta 2 horas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('electricidad', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('electricidad')">Cotizar</button>
         </div>
       </div>
 
@@ -1274,7 +1342,7 @@
     <div class="catalogo-cta">
       <p>¿Buscas automatizar tu hogar o negocio?</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-        <button class="btn btn-solid" onclick="abrirCotizador('electricidad', null)">Solicitar Cotización</button>
+        <button class="btn btn-solid" onclick="cotizarDesdeCatalogo('electricidad')">Solicitar Cotización</button>
         <button class="btn btn-outline-dark" onclick="showPage('servicios')">Ver todos los servicios</button>
       </div>
     </div>
@@ -1291,6 +1359,18 @@
       <div>
         <h2 class="inner-title">Soporte Técnico</h2>
         <p class="inner-sub">Nivel 1 y 2 para computadores, impresoras y equipos tecnológicos.</p>
+      </div>
+    </div>
+    <!-- SELECTOR TIPO SERVICIO -->
+    <div class="tipo-servicio-selector" id="selector-soporte">
+      <p class="tipo-servicio-label">¿Qué tipo de servicio necesitas?</p>
+      <div class="tipo-servicio-btns">
+        <button class="btn-tipo active" id="soporte-tipo-instalacion" onclick="seleccionarTipo('soporte','instalacion')">
+          Instalación
+        </button>
+        <button class="btn-tipo" id="soporte-tipo-mantenimiento" onclick="seleccionarTipo('soporte','mantenimiento')">
+          Mantenimiento
+        </button>
       </div>
     </div>
     <div class="catalogo-grid">
@@ -1311,7 +1391,7 @@
           <span class="prod-tag tech-tag">Diagnóstico</span>
           <h4>Diagnóstico y Reparación PC</h4>
           <p>Revisión completa de hardware y software, detección y solución de fallas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('soporte', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('soporte')">Cotizar</button>
         </div>
       </div>
 
@@ -1334,7 +1414,7 @@
           <span class="prod-tag tech-tag">Software</span>
           <h4>Instalación y Configuración OS</h4>
           <p>Windows, macOS o Linux. Drivers, actualizaciones y optimización del sistema.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('soporte', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('soporte')">Cotizar</button>
         </div>
       </div>
 
@@ -1354,7 +1434,7 @@
           <span class="prod-tag tech-tag">Recuperación</span>
           <h4>Recuperación de Datos</h4>
           <p>Recuperación de archivos borrados, discos dañados y particiones perdidas.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('soporte', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('soporte')">Cotizar</button>
         </div>
       </div>
 
@@ -1375,7 +1455,7 @@
           <span class="prod-tag tech-tag">Remoto</span>
           <h4>Soporte Remoto</h4>
           <p>Asistencia técnica en línea rápida, solución de problemas sin desplazamiento.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('soporte', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('soporte')">Cotizar</button>
         </div>
       </div>
 
@@ -1395,7 +1475,7 @@
           <span class="prod-tag tech-tag">Mantenimiento</span>
           <h4>Mantenimiento Preventivo</h4>
           <p>Limpieza interna, cambio de pasta térmica, optimización y antivirus.</p>
-          <button class="btn-cotizar" onclick="abrirCotizador('soporte', this)">Cotizar</button>
+          <button class="btn-cotizar" onclick="cotizarDesdeCatalogo('soporte')">Cotizar</button>
         </div>
       </div>
 
@@ -1403,7 +1483,7 @@
     <div class="catalogo-cta">
       <p>¿Tu equipo necesita atención profesional?</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-        <button class="btn btn-solid" onclick="abrirCotizador('soporte', null)">Solicitar Cotización</button>
+        <button class="btn btn-solid" onclick="cotizarDesdeCatalogo('soporte')">Solicitar Cotización</button>
         <button class="btn btn-outline-dark" onclick="showPage('servicios')">Ver todos los servicios</button>
       </div>
     </div>

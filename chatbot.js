@@ -369,9 +369,9 @@ function cbGenerarPDF(d) {
 
   // Datos cliente
   doc.setFillColor(240, 248, 255);
-  doc.rect(margin, 50, W - margin*2, 38, 'F');
+  doc.rect(margin, 50, W - margin*2, 46, 'F');
   doc.setDrawColor(200, 220, 240);
-  doc.rect(margin, 50, W - margin*2, 38);
+  doc.rect(margin, 50, W - margin*2, 46);
 
   doc.setTextColor(10,22,40);
   doc.setFontSize(10);
@@ -383,21 +383,26 @@ function cbGenerarPDF(d) {
   doc.text(`Teléfono:  ${d.telefono}`,         margin+4, 71);
   doc.text(`Correo:    ${d.correo}`,           margin+4, 77);
   doc.text(`Ciudad:    ${d.ciudad}`,           margin+4, 83);
+  // Servicio y tipo seleccionado
+  const tipoLabel = d.tipoServicio || 'Instalación';
+  doc.text(`Servicio:  ${d.servicio || ''}`,   margin+4, 89);
+  doc.text(`Tipo:      ${tipoLabel}`,          margin+90, 89);
 
   // Detalle del servicio
   doc.setFillColor(10,22,40);
-  doc.rect(margin, 96, W - margin*2, 8, 'F');
+  doc.rect(margin, 104, W - margin*2, 8, 'F');
   doc.setTextColor(255,255,255);
   doc.setFontSize(9);
   doc.setFont('helvetica','bold');
-  doc.text('CONCEPTO',    margin+4,   102);
-  doc.text('CANT.',       margin+105, 102);
-  doc.text('V. UNIT.',    margin+120, 102);
-  doc.text('TOTAL',       margin+148, 102);
+  doc.text('CONCEPTO',    margin+4,   110);
+  doc.text('CANT.',       margin+105, 110);
+  doc.text('V. UNIT.',    margin+120, 110);
+  doc.text('TOTAL',       margin+148, 110);
 
   // Fila del producto
   const precioObj  = cbGetPrecio(d.producto || '');
   const esTodo     = (d.modalidad || '').includes('todo') || (d.modalidad || '').includes('Todo');
+  const esInstalacion = (d.tipoServicio || 'Instalación') === 'Instalación';
   const precioUnit = esTodo ? precioObj.todo : precioObj.mano;
   const cantidad   = parseInt(d.cantidad, 10) || 1;
   const subtotal   = precioUnit * cantidad;
@@ -405,55 +410,65 @@ function cbGenerarPDF(d) {
   const total      = subtotal + margen;
 
   doc.setFillColor(248, 252, 255);
-  doc.rect(margin, 104, W - margin*2, 10, 'F');
+  doc.rect(margin, 112, W - margin*2, 10, 'F');
   doc.setDrawColor(210,225,240);
-  doc.rect(margin, 104, W - margin*2, 10);
+  doc.rect(margin, 112, W - margin*2, 10);
   doc.setTextColor(30,40,60);
   doc.setFont('helvetica','normal');
   doc.setFontSize(8.5);
 
   // Texto del producto con wrap
   const prodLabel = (d.producto || d.servicio || '').split('(')[0].trim();
-  doc.text(prodLabel, margin+4, 111, { maxWidth: 95 });
-  doc.text(String(cantidad),                            margin+107, 111);
-  doc.text(cbFmtCOP(precioUnit),                        margin+116, 111);
-  doc.text(cbFmtCOP(subtotal),                          margin+143, 111);
+  doc.text(prodLabel, margin+4, 119, { maxWidth: 95 });
+  doc.text(String(cantidad),                            margin+107, 119);
+  doc.text(cbFmtCOP(precioUnit),                        margin+116, 119);
+  doc.text(cbFmtCOP(subtotal),                          margin+143, 119);
 
   // Margen
   doc.setFillColor(240,255,240);
-  doc.rect(margin, 114, W - margin*2, 9, 'F');
+  doc.rect(margin, 122, W - margin*2, 9, 'F');
   doc.setTextColor(30,100,50);
   doc.setFontSize(8.5);
-  doc.text('Margen de imprevistos (5%)', margin+4, 120);
-  doc.text(cbFmtCOP(margen), margin+143, 120);
+  doc.text('Margen de imprevistos (5%)', margin+4, 128);
+  doc.text(cbFmtCOP(margen), margin+143, 128);
 
   // Total
   doc.setFillColor(10,22,40);
-  doc.rect(margin, 123, W - margin*2, 10, 'F');
+  doc.rect(margin, 131, W - margin*2, 10, 'F');
   doc.setTextColor(0,200,255);
   doc.setFontSize(10);
   doc.setFont('helvetica','bold');
-  doc.text('TOTAL ESTIMADO', margin+4, 130);
-  doc.text(cbFmtCOP(total), margin+137, 130);
+  doc.text('TOTAL ESTIMADO', margin+4, 138);
+  doc.text(cbFmtCOP(total), margin+137, 138);
 
-  // Modalidad badge
+  // Badges: Modalidad + Tipo de servicio
   doc.setFillColor(esTodo ? 0 : 30, esTodo ? 120 : 100, esTodo ? 200 : 200);
-  doc.roundedRect(margin, 137, 80, 8, 2, 2, 'F');
+  doc.roundedRect(margin, 145, 80, 8, 2, 2, 'F');
   doc.setTextColor(255,255,255);
   doc.setFontSize(8);
-  doc.text(`Modalidad: ${esTodo ? 'Todo costo' : 'Solo mano de obra'}`, margin+4, 143);
+  doc.text(`Modalidad: ${esTodo ? 'Todo costo' : 'Solo mano de obra'}`, margin+4, 151);
+
+  const tipoColor = esInstalacion ? [0, 130, 80] : [180, 100, 0];
+  doc.setFillColor(...tipoColor);
+  doc.roundedRect(margin + 84, 145, 60, 8, 2, 2, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(8);
+  doc.text(`Tipo: ${d.tipoServicio || 'Instalación'}`, margin+88, 151);
 
   // Notas
   doc.setTextColor(100,120,140);
   doc.setFont('helvetica','italic');
   doc.setFontSize(8);
-  doc.text('* Precios estimados sujetos a confirmación en visita técnica.', margin, 153);
-  doc.text('* El valor final puede variar según condiciones del lugar de instalación.', margin, 158);
-  doc.text('* El primer mantenimiento a partir de la fecha terminada de la garantía cuenta con 6 meses gratuitos.', margin, 163);
-  doc.setTextColor(10, 100, 10);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.text('★ Garantía: El trabajo realizado tiene garantía de 1 año.', margin, 169);
+  doc.text('* Precios estimados sujetos a confirmación en visita técnica.', margin, 162);
+  doc.text('* El valor final puede variar según condiciones del lugar de instalación.', margin, 167);
+
+  if (esInstalacion) {
+    doc.text('* El primer mantenimiento a partir de la fecha terminada de la garantía cuenta con 6 meses gratuitos.', margin, 172);
+    doc.setTextColor(10, 100, 10);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text('★ Garantía: El trabajo realizado tiene garantía de 1 año.', margin, 178);
+  }
 
   // Footer
   doc.setFillColor(10,22,40);
@@ -493,11 +508,31 @@ function cbHandleIntent(intent) {
     const key = intent.replace('cotizar_','');
     const cat = CB_CATALOGO[key];
     if (cat) {
-      cbState.step    = 'cot_subproducto';
+      cbState.step    = 'cot_tipo_servicio';
       cbState.cotData = { servicioKey: key, servicio: cat.nombre, unidad: cat.unidad };
-      cbBotRespond(`${cat.emoji} <b>${cat.nombre}</b>\n\n¿Qué producto o solución te interesa?`, cat.items);
+      cbBotRespond(
+        `${cat.emoji} <b>${cat.nombre}</b> ✅\n\n¿Qué tipo de servicio necesitas?`,
+        [
+          { label: '🔧 Instalación',    value: '__tipo_instalacion' },
+          { label: '🛠️ Mantenimiento',  value: '__tipo_mantenimiento' },
+        ]
+      );
       return;
     }
+  }
+  if (intent.startsWith('__tipo_')) {
+    const tipo = intent === '__tipo_instalacion' ? 'Instalación' : 'Mantenimiento';
+    cbState.cotData.tipoServicio = tipo;
+    cbState.step = 'cot_subproducto';
+    const key = cbState.cotData.servicioKey;
+    const cat = CB_CATALOGO[key];
+    if (cat) {
+      cbBotRespond(
+        `<b>${tipo === 'Instalación' ? '🔧' : '🛠️'} ${tipo}</b> seleccionado ✅\n\n¿Qué producto o solución te interesa?`,
+        cat.items
+      );
+    }
+    return;
   }
   if (intent.startsWith('__sub_')) {
     const producto = decodeURIComponent(intent.replace('__sub_',''));
@@ -549,6 +584,15 @@ function cbHandleCotStep(text) {
   const t = text.trim();
   switch (cbState.step) {
 
+    case 'cot_tipo_servicio': {
+      // El usuario escribió texto en vez de hacer clic en el botón
+      cbBotRespond('Por favor selecciona una opción: <b>Instalación</b> o <b>Mantenimiento</b>.', [
+        { label: '🔧 Instalación',   value: '__tipo_instalacion'   },
+        { label: '🛠️ Mantenimiento', value: '__tipo_mantenimiento' },
+      ]);
+      break;
+    }
+
     case 'cot_cantidad': {
       const qty = parseInt(t, 10);
       if (isNaN(qty) || qty < 1) { cbBotRespond('Por favor ingresa un número válido mayor a 0.'); return; }
@@ -570,6 +614,7 @@ function cbHandleCotStep(text) {
       cbBotRespond(
         `✅ <b>Resumen de costos estimado:</b>\n\n` +
         `📦 Producto: <b>${(cbState.cotData.producto||'').split('(')[0].trim()}</b>\n` +
+        `🔧 Tipo: <b>${cbState.cotData.tipoServicio || 'Instalación'}</b>\n` +
         `🔢 Cantidad: <b>${qty} ${cbState.cotData.unidad||'unidad(es)'}</b>\n` +
         `💵 Precio unit.: <b>${cbFmtCOP(precioUnit)}</b>\n` +
         `📊 Subtotal: <b>${cbFmtCOP(subtotal)}</b>\n` +
@@ -621,6 +666,7 @@ function cbEnviarCotizacion() {
   const waMsg =
     `🔔 *Nueva Cotización - Pazgo Tecnología*\n\n` +
     `📋 *Servicio:* ${d.servicio}\n` +
+    `🔧 *Tipo:* ${d.tipoServicio || 'Instalación'}\n` +
     `🔵 *Producto:* ${(d.producto||'').split('(')[0].trim()}\n` +
     `🔢 *Cantidad:* ${d.cantidad} ${d.unidad||''}\n` +
     `⚙️ *Modalidad:* ${d.modalidad}\n` +
@@ -663,6 +709,8 @@ const CB_LABELS = {
   cotizar_acceso:'🔐 Cotizar Acceso', cotizar_soporte:'💻 Cotizar Soporte',
   '__mod_todo':'🏗️ Todo costo — Materiales + Mano de obra',
   '__mod_mano':'🔧 Solo mano de obra — Yo pongo los materiales',
+  '__tipo_instalacion':'🔧 Instalación',
+  '__tipo_mantenimiento':'🛠️ Mantenimiento',
 };
 function cbGetLabel(v) {
   if (CB_LABELS[v]) return CB_LABELS[v];
@@ -681,7 +729,7 @@ function cbProcessMessage(raw) {
   if (input) input.value = '';
 
   // Comandos internos → cbHandleIntent
-  if (value.startsWith('__sub_') || value.startsWith('__mod_') ||
+  if (value.startsWith('__sub_') || value.startsWith('__mod_') || value.startsWith('__tipo_') ||
       value.startsWith('cotizar_') || value.startsWith('info_') ||
       ['wa','menu','horarios','contacto','cobertura','servicios','cotizar','gracias'].includes(value)) {
     cbHandleIntent(value); return;

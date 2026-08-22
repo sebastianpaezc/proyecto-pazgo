@@ -105,16 +105,159 @@ function handleCotHome(e) {
 // Cotización página Cotizaciones
 function handleCotizacion(e) {
     e.preventDefault();
+    const tipoServicio   = document.getElementById('cot-tipo-servicio').value;
+    const opcionServicio = document.getElementById('cot-opcion-servicio')?.value || '';
+    const nombre   = document.getElementById('cot-nombre').value.trim();
+    const telefono = document.getElementById('cot-telefono').value.trim();
+    const email    = document.getElementById('cot-email').value.trim();
+    const servicio = document.getElementById('cot-servicio').value;
+    const mensaje  = document.getElementById('cot-mensaje').value.trim();
+
     const datos = [
-        { label: 'Nombre',   value: document.getElementById('cot-nombre').value.trim() },
-        { label: 'Teléfono', value: document.getElementById('cot-telefono').value.trim() },
-        { label: 'Email',    value: document.getElementById('cot-email').value.trim() },
-        { label: 'Servicio', value: document.getElementById('cot-servicio').value },
-        { label: 'Mensaje',  value: document.getElementById('cot-mensaje').value.trim() }
+        { label: 'Nombre',      value: nombre   },
+        { label: 'Teléfono',    value: telefono },
+        { label: 'Email',       value: email    },
+        { label: 'Servicio',    value: servicio },
+        { label: 'Se requiere', value: tipoServicio || 'No especificado' },
+        { label: 'Mensaje',     value: mensaje  }
     ];
+
     enviarWhatsApp('Cotización', datos);
     showConfirmation('¡Solicitud enviada!', 'Te abrimos WhatsApp con tu solicitud lista para enviar.', datos);
+
+    // Limpiar resumen al enviar
+    const resumen = document.getElementById('cot-resumen');
+    if (resumen) resumen.style.display = 'none';
+    const campoTipo = document.getElementById('cot-tipo-servicio');
+    if (campoTipo) campoTipo.value = '';
+    const campoOpcion = document.getElementById('cot-opcion-servicio');
+    if (campoOpcion) campoOpcion.value = '';
     e.target.reset();
+}
+
+// Genera y descarga el PDF de cotización desde el formulario web
+function generarPDFCotizacion(d) {
+    const { jsPDF } = window.jspdf || {};
+    if (!jsPDF) {
+        setTimeout(() => generarPDFCotizacion(d), 1000);
+        return;
+    }
+
+    // Limpiar emojis del tipo para que jsPDF no los muestre como símbolos
+    const tipoLimpio = (d.tipoServicio || 'No especificado')
+        .replace(/[\u{1F300}-\u{1FFFF}]/gu, '')
+        .replace(/[\u2600-\u27BF]/g, '')
+        .trim();
+
+    const esInstalacion = tipoLimpio.toLowerCase().includes('instalaci') ||
+                          d.tipoServicio === 'No especificado';
+
+    const doc  = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W    = 210;
+    const m    = 18;
+    const fecha = new Date().toLocaleDateString('es-CO', { day:'2-digit', month:'long', year:'numeric' });
+
+    /* ── HEADER ── */
+    doc.setFillColor(10, 22, 40);
+    doc.rect(0, 0, W, 42, 'F');
+
+    doc.setTextColor(0, 200, 255);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PAZGO', m, 18);
+    doc.setFontSize(8);
+    doc.setTextColor(160, 200, 220);
+    doc.text('TECNOLOGIA', m, 24);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.text('COTIZACION DE SERVICIOS', W / 2, 18, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setTextColor(0, 200, 255);
+    doc.text(`Fecha: ${fecha}`, W / 2, 26, { align: 'center' });
+
+    /* ── DATOS DEL CLIENTE ── */
+    const alturaCliente = d.opcionServicio ? 58 : 52;
+    doc.setFillColor(240, 248, 255);
+    doc.rect(m, 50, W - m * 2, alturaCliente, 'F');
+    doc.setDrawColor(200, 220, 240);
+    doc.rect(m, 50, W - m * 2, alturaCliente);
+
+    doc.setTextColor(10, 22, 40);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DATOS DEL CLIENTE', m + 4, 58);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text(`Nombre:    ${d.nombre}`,    m + 4, 65);
+    doc.text(`Telefono:  ${d.telefono}`,  m + 4, 71);
+    doc.text(`Correo:    ${d.correo}`,    m + 4, 77);
+    doc.text(`Servicio:  ${d.servicio}`,  m + 4, 83);
+    doc.text(`Tipo:      ${tipoLimpio}`,  m + 4, 89);
+    let yPos = 95;
+    if (d.opcionServicio) {
+        doc.text(`Opcion:    ${d.opcionServicio}`, m + 4, yPos);
+        yPos += 6;
+    }
+
+    /* ── DETALLE DE LA SOLICITUD ── */
+    const yTabla = 50 + alturaCliente + 8;
+    doc.setFillColor(10, 22, 40);
+    doc.rect(m, yTabla, W - m * 2, 8, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DESCRIPCION DE LA SOLICITUD', m + 4, yTabla + 6);
+
+    doc.setFillColor(248, 252, 255);
+    doc.rect(m, yTabla + 8, W - m * 2, 30, 'F');
+    doc.setDrawColor(210, 225, 240);
+    doc.rect(m, yTabla + 8, W - m * 2, 30);
+    doc.setTextColor(30, 40, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    const mensajeLines = doc.splitTextToSize(d.mensaje || 'Sin descripcion adicional.', W - m * 2 - 8);
+    doc.text(mensajeLines, m + 4, yTabla + 15);
+
+    /* ── BADGE TIPO ── */
+    const yBadge = yTabla + 44;
+    const tipoColor = esInstalacion ? [0, 120, 200] : [180, 100, 0];
+    doc.setFillColor(...tipoColor);
+    doc.roundedRect(m, yBadge, 90, 8, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Tipo de servicio: ${tipoLimpio}`, m + 4, yBadge + 6);
+
+    /* ── NOTAS ── */
+    const yNotas = yBadge + 16;
+    doc.setTextColor(100, 120, 140);
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(8);
+    doc.text('* Precios estimados sujetos a confirmacion en visita tecnica.', m, yNotas);
+    doc.text('* El valor final puede variar segun condiciones del lugar de instalacion.', m, yNotas + 5);
+
+    if (esInstalacion) {
+        doc.text('* El primer mantenimiento a partir de la garantia cuenta con 6 meses gratuitos.', m, yNotas + 10);
+        doc.setTextColor(10, 100, 10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Garantia: El trabajo realizado tiene garantia de 1 ano.', m, yNotas + 16);
+    }
+
+    /* ── FOOTER ── */
+    doc.setFillColor(10, 22, 40);
+    doc.rect(0, 272, W, 25, 'F');
+    doc.setTextColor(0, 200, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('Pazgo Tecnologia', W / 2, 280, { align: 'center' });
+    doc.setTextColor(160, 200, 220);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.text('+57 311 591 6633  |  juandapaez24@gmail.com  |  Soacha, Cundinamarca', W / 2, 286, { align: 'center' });
+    doc.text('www.pazgotecnologia.com', W / 2, 291, { align: 'center' });
+
+    doc.save(`Cotizacion_Pazgo_${d.nombre.replace(/\s/g, '_')}.pdf`);
 }
 
 // Agendar visita
@@ -199,6 +342,66 @@ const modalidades = {
     camaras: 'todo', alarmas: 'todo', redes: 'todo',
     electricidad: 'todo', soporte: 'todo'
 };
+
+// Estado: tipo de servicio por catálogo ('instalacion' | 'mantenimiento')
+const tiposServicio = {
+    camaras: 'instalacion', alarmas: 'instalacion', redes: 'instalacion',
+    electricidad: 'instalacion', soporte: 'instalacion'
+};
+
+const NOMBRES_SERVICIO = {
+    camaras: 'Cámaras de Seguridad',
+    alarmas: 'Alarmas',
+    redes: 'Redes y Conectividad',
+    electricidad: 'Electricidad y Automatización',
+    soporte: 'Soporte Técnico'
+};
+
+// Selecciona el tipo (instalacion / mantenimiento) en el catálogo
+function seleccionarTipo(servicio, tipo) {
+    tiposServicio[servicio] = tipo;
+
+    const btnInst = document.getElementById(servicio + '-tipo-instalacion');
+    const btnMant = document.getElementById(servicio + '-tipo-mantenimiento');
+    if (btnInst) btnInst.classList.toggle('active', tipo === 'instalacion');
+    if (btnMant) btnMant.classList.toggle('active', tipo === 'mantenimiento');
+}
+
+// Abre cotizaciones con resumen precargado desde un catálogo
+function cotizarDesdeCatalogo(servicio) {
+    const tipo = tiposServicio[servicio] || 'instalacion';
+    const nombreServicio = NOMBRES_SERVICIO[servicio] || servicio;
+    const tipoLabel      = tipo === 'instalacion' ? 'Instalación' : 'Mantenimiento';
+    const tipoEmoji      = tipo === 'instalacion' ? 'Instalacion' : 'Mantenimiento';
+
+    // Precarga el select de servicio
+    const selectServicio = document.getElementById('cot-servicio');
+    if (selectServicio) {
+        const opciones = Array.from(selectServicio.options);
+        const match = opciones.find(o => o.text.toLowerCase().includes(nombreServicio.split(' ')[0].toLowerCase()));
+        if (match) selectServicio.value = match.value;
+    }
+
+    // Guarda el tipo SIN emoji en el campo oculto (para el PDF)
+    const campoTipo = document.getElementById('cot-tipo-servicio');
+    if (campoTipo) campoTipo.value = tipoLabel;
+
+    // Guarda el nombre del servicio en el campo oculto de opción
+    const campoOpcion = document.getElementById('cot-opcion-servicio');
+    if (campoOpcion) campoOpcion.value = nombreServicio;
+
+    // Muestra el resumen
+    const resumen = document.getElementById('cot-resumen');
+    const spanServicio = document.getElementById('cot-resumen-servicio');
+    const spanTipo = document.getElementById('cot-resumen-tipo');
+    if (resumen && spanServicio && spanTipo) {
+        spanServicio.textContent = nombreServicio;
+        spanTipo.textContent = tipoEmoji;
+        resumen.style.display = '';
+    }
+
+    showPage('cotizaciones');
+}
 
 // Abre el cotizador del servicio indicado
 function abrirCotizador(servicio) {

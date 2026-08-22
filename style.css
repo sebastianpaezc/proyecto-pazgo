@@ -1395,7 +1395,111 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 18px;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
+}
+
+/* ── Selector tipo de servicio (Instalación / Mantenimiento) ── */
+.tipo-servicio-selector {
+    background: linear-gradient(135deg, #f0f7ff, #e8f2fe);
+    border: 1.5px solid #c8dff8;
+    border-radius: var(--radius-lg);
+    padding: 18px 22px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.tipo-servicio-label {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.tipo-servicio-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-tipo {
+    padding: 10px 22px;
+    border: 2px solid var(--border);
+    border-radius: 30px;
+    background: var(--white);
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-tipo:hover {
+    border-color: var(--cyan);
+    color: var(--cyan-dk);
+    background: #f0fbff;
+}
+
+.btn-tipo.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+    box-shadow: 0 3px 12px rgba(10,22,40,0.18);
+}
+
+/* ── Resumen de selección en página de cotizaciones ── */
+.cot-seleccion-resumen {
+    background: linear-gradient(135deg, #0f2a48, #1a3a60);
+    border: 1.5px solid #00c8ff;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.cot-seleccion-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.cot-seleccion-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cot-seleccion-texto {
+    flex: 1;
+}
+
+.cot-seleccion-titulo {
+    font-weight: 700;
+    color: #00c8ff;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px 0;
+}
+
+.cot-seleccion-detalle {
+    font-size: 0.97rem;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+}
+
+.cot-seleccion-detalle strong {
+    color: #8dd8ff;
+}
+
+.cot-seleccion-detalle span {
+    font-weight: 700;
+    color: #ffffff;
 }
 
 .catalogo-icon {
@@ -1529,6 +1633,12 @@ body {
     .catalogo-header {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .tipo-servicio-selector {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
     }
 }
 
